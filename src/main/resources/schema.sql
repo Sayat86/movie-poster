@@ -31,8 +31,11 @@ create table events
     participant_limit int not null,
     request_moderation boolean not null,
     state varchar(50) not null,
-    location_lat varchar(255) not null,
-    location_lon varchar(255) not null,
+    location_lat double precision not null,
+    location_lon double precision not null,
+    confirmed_requests int not null,
+    views int not null,
+    is_published boolean not null,
     category_id int references categories(id) not null,
     initiator_id int references users(id)
 );

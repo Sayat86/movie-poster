@@ -1,10 +1,15 @@
 package com.example.movie_poster.event;
 
+import com.example.movie_poster.category.Category;
+import com.example.movie_poster.compilation_events.CompilationEvents;
+import com.example.movie_poster.request.Request;
+import com.example.movie_poster.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -38,4 +43,18 @@ public class Event {
     private int views;
     @Column(name = "is_published")
     private Boolean isPublished;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @ManyToOne
+    @JoinColumn(name = "initiator_id")
+    private User initiator;
+
+    @OneToMany(mappedBy = "event")
+    private List<CompilationEvents> compilationEvents;
+
+    @OneToMany(mappedBy = "event")
+    private List<Request> requests;
 }

@@ -1,5 +1,7 @@
 package com.example.movie_poster.request;
 
+import com.example.movie_poster.event.Event;
+import com.example.movie_poster.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,4 +18,12 @@ public class Request {
     private int id;
     private LocalDateTime created;
     private String status;
+
+    @ManyToOne
+    @JoinColumn(name = "event_id")
+    private Event event;
+
+    @ManyToOne
+    @JoinColumn(name = "requester_id")
+    private User requester;
 }

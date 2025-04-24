@@ -33,11 +33,10 @@ public class Event {
     private int participantLimit;
     @Column(name = "request_moderation")
     private Boolean requestModeration;
-    private String state;
-    @Column(name = "location_lat")
-    private Double locationLat;
-    @Column(name = "location_lon")
-    private Double locationLon;
+    @Enumerated
+    private EventState state;
+    @Embedded
+    private Location location;
     @Column(name = "confirmed_requests")
     private int confirmedRequests;
     private int views;

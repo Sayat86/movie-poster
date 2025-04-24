@@ -14,7 +14,7 @@ import java.util.List;
 public class Compilation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private int id; //подборка
     private String title;
     private Boolean pinned;
 

@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import java.awt.print.Pageable;
 import java.util.List;
 
-public interface EventRepository extends JpaRepository<Event, Integer>, JpaSpecificationExecutor<Event> {
-    List<Event> findByInitiatorId(Long userId, Pageable pageable);
+public interface EventRepository extends JpaRepository<Event, Integer> {
+    List<Event> findByInitiatorId(Integer userId, Pageable pageable);
 }

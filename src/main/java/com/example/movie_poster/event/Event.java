@@ -36,6 +36,8 @@ public class Event {
     @Enumerated
     private EventState state;
     @Embedded
+    @AttributeOverride(name = "lat", column = @Column(name = "location_lat"))
+    @AttributeOverride(name = "lon", column = @Column(name = "location_lon"))
     private Location location;
     @Column(name = "confirmed_requests")
     private int confirmedRequests;

@@ -1,8 +1,10 @@
 package com.example.movie_poster.event.dto;
 
 import com.example.movie_poster.category.dto.CategoryCreateDto;
+import com.example.movie_poster.category.dto.CategoryResponseDto;
 import com.example.movie_poster.event.Location;
 import com.example.movie_poster.user.dto.UserCreateDto;
+import com.example.movie_poster.user.dto.UserResponseDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,8 +24,8 @@ public class EventFullDto {
     private String createdOn;
     private String publishedOn;
 
-    private CategoryCreateDto category;
-    private UserCreateDto initiator;
+    private CategoryResponseDto category;
+    private UserResponseDto initiator;
     private Location location;
 
     private Boolean paid;

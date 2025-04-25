@@ -1,5 +1,7 @@
-package com.example.movie_poster.user;
+package com.example.movie_poster.controller.admin;
 
+import com.example.movie_poster.user.User;
+import com.example.movie_poster.user.UserService;
 import com.example.movie_poster.user.dto.UserCreateDto;
 import com.example.movie_poster.user.dto.UserMapper;
 import com.example.movie_poster.user.dto.UserResponseDto;
@@ -14,7 +16,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
-public class UserController {
+public class AdminUserController {
     private final UserService userService;
     private final UserMapper userMapper;
 

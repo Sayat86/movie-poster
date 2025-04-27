@@ -13,7 +13,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class EventShortDto {
 
-    private Long id;
+    private int id;
     private String title;
     private String annotation;
     private String eventDate;

@@ -27,7 +27,7 @@ public class EventCreateDto {
     private String description;
 
     @NotNull
-    private Long category;
+    private Integer category;
 
     @NotNull
     private String eventDate;

@@ -12,10 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import static com.example.movie_poster.utils.RequestConstants.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
+@RequestMapping("/admin/users")
 public class AdminUserController {
     private final UserService userService;
     private final UserMapper userMapper;
@@ -33,14 +34,12 @@ public class AdminUserController {
         return userMapper.toResponse(userService.update(user, id));
     }
 
-    @GetMapping("/{id}")
-    public UserResponseDto findById(@PathVariable int id) {
-        return userMapper.toResponse(userService.findById(id));
-    }
-
     @GetMapping
-    public List<UserResponseDto> findAll() {
-        return userMapper.toResponse(userService.findAll());
+    public List<UserResponseDto> findAll(@RequestHeader int ids,
+                                         @RequestParam(defaultValue = DEFAULT_FROM) int from,
+                                         @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
+        int page = from / size;
+        return userMapper.toResponse(userService.findAll(ids, page, size));
     }
 
     @DeleteMapping("/{id}")

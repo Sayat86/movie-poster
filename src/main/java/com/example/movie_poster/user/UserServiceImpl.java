@@ -4,6 +4,9 @@ import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.NotFoundException;
 import com.example.movie_poster.user.dto.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -47,7 +50,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<User> findAll(int id, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> pageResult = userRepository.findByUserId(id, pageable);
+        return pageResult.getContent();
+    }
+
+    @Override
+    public List<User> findAllEventsByUserId(int id, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> pageResult = userRepository.findByUserId(id, pageable);
+        return pageResult.getContent();
     }
 }

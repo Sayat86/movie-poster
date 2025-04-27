@@ -16,7 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class EventFullDto {
 
-    private Long id;
+    private int id;
     private String title;
     private String annotation;
     private String description;

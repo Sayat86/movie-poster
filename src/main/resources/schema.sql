@@ -26,7 +26,7 @@ create table events
     description varchar(255) not null,
     event_date timestamp with time zone not null,
     created_on timestamp with time zone not null,
-    published_on timestamp with time zone not null,
+    published_on timestamp with time zone,
     paid boolean not null,
     participant_limit int not null,
     request_moderation boolean not null,

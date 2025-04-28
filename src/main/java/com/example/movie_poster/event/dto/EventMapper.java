@@ -11,35 +11,28 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 public class EventMapper {
-    private Event mapToEvent(EventCreateDto dto, User user, Category category) {
+    //EventCreateDto -> Event
+    public Event fromCreate(EventCreateDto eventCreate) {
         Event event = new Event();
-        event.setTitle(dto.getTitle());
-        event.setAnnotation(dto.getAnnotation());
-        event.setDescription(dto.getDescription());
-        event.setEventDate(LocalDateTime.parse(dto.getEventDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        event.setLocation(dto.getLocation());
-        event.setPaid(dto.getPaid());
-        event.setParticipantLimit(dto.getParticipantLimit());
-        event.setRequestModeration(dto.getRequestModeration());
-        event.setCreatedOn(LocalDateTime.now());
-        event.setInitiator(user);
+        Category category = new Category();
+        category.setId(eventCreate.getCategory());
         event.setCategory(category);
-        event.setState(EventState.PENDING);
+        event.setEventDate(eventCreate.getEventDate());
+        event.setAnnotation(eventCreate.getAnnotation());
+        event.setPaid(eventCreate.getPaid());
+        event.setDescription(eventCreate.getDescription());
+        event.setRequestModeration(eventCreate.getRequestModeration());
+        event.setLocation(eventCreate.getLocation());
+        event.setTitle(eventCreate.getTitle());
+        event.setParticipantLimit(eventCreate.getParticipantLimit());
         return event;
     }
 
-    private EventResponseDto mapToDto(Event event) {
-        EventResponseDto dto = new EventResponseDto();
-        dto.setId(event.getId());
-        dto.setTitle(event.getTitle());
-        dto.setAnnotation(event.getAnnotation());
-        dto.setDescription(event.getDescription());
-        dto.setEventDate(event.getEventDate());
-        dto.setLocation(event.getLocation());
-        dto.setPaid(event.getPaid());
-        dto.setParticipantLimit(event.getParticipantLimit());
-        dto.setRequestModeration(event.getRequestModeration());
-        dto.setState(event.getState().name()); // Состояние события
-        return dto;
+    //Event -> EventFullDto toFullDto()
+    public EventFullDto toFullDto(Event event) {
+        return null;
     }
+    //Event -> EventShortDto toShortDto()
+
+
 }

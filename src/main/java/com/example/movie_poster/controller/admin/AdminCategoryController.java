@@ -33,16 +33,6 @@ public class AdminCategoryController {
         return categoryMapper.toResponse(categoryService.update(category, id));
     }
 
-//    @GetMapping("/{id}")
-//    public CategoryResponseDto findById(@PathVariable int id) {
-//        return categoryMapper.toResponse(categoryService.findById(id));
-//    }
-
-//    @GetMapping
-//    public List<CategoryResponseDto> findAll() {
-//        return categoryMapper.toResponse(categoryService.findAll());
-//    }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable int id) {

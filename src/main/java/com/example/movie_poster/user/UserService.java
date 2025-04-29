@@ -7,6 +7,6 @@ public interface UserService {
     User update(User user, int id);
     User findById(int id);
     void deleteById(int id);
-    List<User> findAll(int id, int page, int size);
-    List<User> findAllEventsByUserId(int id, int page, int size);
+    List<User> findAll(List<Integer> ids, int page, int size);
+    //List<User> findAllEventsByUserId(int id, int page, int size);
 }

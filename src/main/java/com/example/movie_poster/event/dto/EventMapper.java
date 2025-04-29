@@ -17,22 +17,50 @@ public class EventMapper {
         Category category = new Category();
         category.setId(eventCreate.getCategory());
         event.setCategory(category);
-        event.setEventDate(eventCreate.getEventDate());
         event.setAnnotation(eventCreate.getAnnotation());
-        event.setPaid(eventCreate.getPaid());
         event.setDescription(eventCreate.getDescription());
-        event.setRequestModeration(eventCreate.getRequestModeration());
+        event.setEventDate(eventCreate.getEventDate());
         event.setLocation(eventCreate.getLocation());
-        event.setTitle(eventCreate.getTitle());
+        event.setPaid(eventCreate.getPaid());
         event.setParticipantLimit(eventCreate.getParticipantLimit());
+        event.setRequestModeration(eventCreate.getRequestModeration());
+        event.setTitle(eventCreate.getTitle());
         return event;
     }
 
     //Event -> EventFullDto toFullDto()
     public EventFullDto toFullDto(Event event) {
-        return null;
+        EventFullDto eventFullDto = new EventFullDto();
+        eventFullDto.setId(event.getId());
+        eventFullDto.setTitle(event.getTitle());
+        eventFullDto.setAnnotation(event.getAnnotation());
+        eventFullDto.setDescription(event.getDescription());
+        eventFullDto.setEventDate(event.getEventDate());
+        eventFullDto.setCreatedOn(event.getCreatedOn());
+        eventFullDto.setPublishedOn(event.getPublishedOn());
+        eventFullDto.setLocation(event.getLocation());
+        eventFullDto.setPaid(event.getPaid());
+        eventFullDto.setParticipantLimit(event.getParticipantLimit());
+        eventFullDto.setRequestModeration(event.getRequestModeration());
+        eventFullDto.setState(event.getState());
+        eventFullDto.setConfirmedRequests(event.getConfirmedRequests());
+        eventFullDto.setViews(event.getViews());
+        //CategoryResponseDto category
+        //UserResponseDto initiator
+        return eventFullDto;
     }
     //Event -> EventShortDto toShortDto()
+    public EventShortDto toShortDto(Event event) {
+        EventShortDto eventShortDto = new EventShortDto();
+        eventShortDto.setId(event.getId());
+        eventShortDto.setTitle(event.getTitle());
+        eventShortDto.setAnnotation(event.getAnnotation());
+        eventShortDto.setEventDate(event.getEventDate());
+        eventShortDto.setPaid(event.getPaid());
+        eventShortDto.setConfirmedRequests(event.getConfirmedRequests());
+        eventShortDto.setViews(event.getViews());
+        return eventShortDto;
+    }
 
 
 }

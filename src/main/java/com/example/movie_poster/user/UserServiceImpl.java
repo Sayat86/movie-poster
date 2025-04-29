@@ -50,16 +50,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll(int id, int page, int size) {
+    public List<User> findAll(List<Integer> ids, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
-        Page<User> pageResult = userRepository.findByUserId(id, pageable);
-        return pageResult.getContent();
-    }
-
-    @Override
-    public List<User> findAllEventsByUserId(int id, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<User> pageResult = userRepository.findByUserId(id, pageable);
+        Page<User> pageResult = userRepository.findByIdIn(ids, pageable);
         return pageResult.getContent();
     }
 }

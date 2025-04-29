@@ -8,9 +8,13 @@ import com.example.movie_poster.exception.NotFoundException;
 import com.example.movie_poster.user.User;
 import com.example.movie_poster.user.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,5 +36,12 @@ public class EventServiceImpl implements EventService {
         event.setViews(0);
         event.setConfirmedRequests(0);
         return eventRepository.save(event);
+    }
+
+    @Override
+    public List<Event> findEventAddedByUserId(int userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> pageResult = eventRepository.findByInitiatorId(userId, pageable);
+        return pageResult.getContent();
     }
 }

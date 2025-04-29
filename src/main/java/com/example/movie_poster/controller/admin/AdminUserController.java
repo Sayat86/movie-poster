@@ -35,12 +35,13 @@ public class AdminUserController {
     }
 
     @GetMapping
-    public List<UserResponseDto> findAll(@RequestHeader int ids,
-                                         @RequestParam(defaultValue = DEFAULT_FROM) int from,
-                                         @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
+    public List<UserResponseDto> findAll(@RequestParam List<Integer> ids,
+                                         @RequestParam(defaultValue = "0") int from,
+                                         @RequestParam(defaultValue = "10") int size) {
         int page = from / size;
         return userMapper.toResponse(userService.findAll(ids, page, size));
     }
+
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

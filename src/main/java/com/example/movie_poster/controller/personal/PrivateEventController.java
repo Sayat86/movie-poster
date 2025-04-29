@@ -6,9 +6,16 @@ import com.example.movie_poster.event.EventService;
 import com.example.movie_poster.event.dto.EventCreateDto;
 import com.example.movie_poster.event.dto.EventFullDto;
 import com.example.movie_poster.event.dto.EventMapper;
+import com.example.movie_poster.event.dto.EventShortDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static com.example.movie_poster.utils.RequestConstants.DEFAULT_FROM;
+import static com.example.movie_poster.utils.RequestConstants.DEFAULT_SIZE;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,6 +23,18 @@ import org.springframework.web.bind.annotation.*;
 public class PrivateEventController {
     private final EventService eventService;
     private final EventMapper eventMapper;
+
+    @GetMapping("/{userId}/events")
+    public List<EventShortDto> findEventAddByUserId(@PathVariable int userId,
+                                                   @RequestParam(defaultValue = DEFAULT_FROM) int from,
+                                                   @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
+        int page = from / size;
+        return eventService.findEventAddedByUserId(userId, page, size)
+                .stream()
+                .map(eventMapper::toShortDto)
+                .collect(Collectors.toList());
+    }
+
     @PostMapping("/{userId}/events")
     public EventFullDto create(@PathVariable int userId,
                                @Valid @RequestBody EventCreateDto eventCreate) {

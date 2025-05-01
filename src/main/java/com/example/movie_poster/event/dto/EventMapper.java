@@ -59,6 +59,8 @@ public class EventMapper {
         eventShortDto.setPaid(event.getPaid());
         eventShortDto.setConfirmedRequests(event.getConfirmedRequests());
         eventShortDto.setViews(event.getViews());
+        //CategoryResponseDto category
+        //UserResponseDto initiator
         return eventShortDto;
     }
 

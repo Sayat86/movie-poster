@@ -4,6 +4,7 @@ import com.example.movie_poster.category.Category;
 import com.example.movie_poster.category.CategoryRepository;
 import com.example.movie_poster.event.dto.EventCreateDto;
 import com.example.movie_poster.exception.BadRequestException;
+import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.NotFoundException;
 import com.example.movie_poster.user.User;
 import com.example.movie_poster.user.UserRepository;
@@ -36,6 +37,27 @@ public class EventServiceImpl implements EventService {
         event.setViews(0);
         event.setConfirmedRequests(0);
         return eventRepository.save(event);
+    }
+
+    @Override
+    public Event updateByUser(Event event, int userId, int eventId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с таким ID не найден"));
+        Event existingEvent = eventRepository.findById(eventId)
+                        .orElseThrow(() -> new NotFoundException("Событие с таким ID не найдено"));
+        // Проверка
+        // - опубликованное событие нельзя редактировать
+        if (existingEvent.getState() == EventState.PUBLISHED) {
+            throw new ConflictException("Опубликованное событие нельзя редактировать");
+        }
+        // - редактировать может только владелец события
+        // - если дата указана, то она не должна быть раньше чем за 2 часа от текущего времени
+        // - если категория указана, проверяем есть ли в базе данных, если нет - исключение
+
+        if (event.getAnnotation() != null) {
+            existingEvent.setAnnotation(event.getAnnotation());
+        }
+        return null;
     }
 
     @Override

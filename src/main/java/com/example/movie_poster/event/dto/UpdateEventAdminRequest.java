@@ -1,6 +1,6 @@
 package com.example.movie_poster.event.dto;
 
-import com.example.movie_poster.event.EventStateAction;
+import com.example.movie_poster.event.EventStateActionAdmin;
 import com.example.movie_poster.event.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -21,5 +21,5 @@ public class UpdateEventAdminRequest {
     private Integer participantLimit;
     private Boolean requestModeration;
     private Location location;
-    private EventStateAction stateAction; // PUBLISH_EVENT, REJECT_EVENT (по спецификации)
+    private EventStateActionAdmin stateAction; // PUBLISH_EVENT, REJECT_EVENT (по спецификации)
 }

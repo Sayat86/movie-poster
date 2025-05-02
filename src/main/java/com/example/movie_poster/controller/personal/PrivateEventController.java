@@ -3,10 +3,7 @@ package com.example.movie_poster.controller.personal;
 import com.example.movie_poster.event.Event;
 import com.example.movie_poster.event.EventRepository;
 import com.example.movie_poster.event.EventService;
-import com.example.movie_poster.event.dto.EventCreateDto;
-import com.example.movie_poster.event.dto.EventFullDto;
-import com.example.movie_poster.event.dto.EventMapper;
-import com.example.movie_poster.event.dto.EventShortDto;
+import com.example.movie_poster.event.dto.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -40,5 +37,13 @@ public class PrivateEventController {
                                @Valid @RequestBody EventCreateDto eventCreate) {
         Event event = eventMapper.fromCreate(eventCreate);
         return eventMapper.toFullDto(eventService.create(event, userId));
+    }
+
+    @PatchMapping("/{userId}/events/{eventId}")
+    public EventFullDto update(@PathVariable int userId,
+                               @PathVariable int eventId,
+                               @Valid @RequestBody UpdateEventUserRequest updateEvent) {
+        Event event = eventMapper.fromUserUpdate(updateEvent);
+        return eventMapper.toFullDto(eventService.updateByUser(event, userId, eventId));
     }
 }

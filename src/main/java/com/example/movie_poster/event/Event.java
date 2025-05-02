@@ -18,7 +18,7 @@ import java.util.List;
 public class Event {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private String title;
     private String annotation;
     private String description;
@@ -30,7 +30,7 @@ public class Event {
     private LocalDateTime publishedOn;
     private Boolean paid;
     @Column(name = "participant_limit")
-    private int participantLimit;
+    private Integer participantLimit;
     @Column(name = "request_moderation")
     private Boolean requestModeration;
     @Enumerated
@@ -40,8 +40,8 @@ public class Event {
     @AttributeOverride(name = "lon", column = @Column(name = "location_lon"))
     private Location location;
     @Column(name = "confirmed_requests")
-    private int confirmedRequests;
-    private int views;
+    private Integer confirmedRequests;
+    private Integer views;
     @Column(name = "is_published")
     private Boolean isPublished;
 

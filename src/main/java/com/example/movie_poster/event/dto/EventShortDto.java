@@ -1,7 +1,9 @@
 package com.example.movie_poster.event.dto;
 
 import com.example.movie_poster.category.dto.CategoryCreateDto;
+import com.example.movie_poster.category.dto.CategoryResponseDto;
 import com.example.movie_poster.user.dto.UserCreateDto;
+import com.example.movie_poster.user.dto.UserResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,8 +24,8 @@ public class EventShortDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
-    private CategoryCreateDto category;
-    private UserCreateDto initiator;
+    private CategoryResponseDto category;
+    private UserResponseDto initiator;
 
     private Boolean paid;
     private Integer confirmedRequests;

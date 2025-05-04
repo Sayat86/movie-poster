@@ -21,10 +21,11 @@ public class PublicCompilationController {
 
     @GetMapping
     public List<CompilationResponseDto> findAll() {
-        return null;
+        return compilationMapper.toResponse(compilationService.findAll());
     }
 
-    @GetMapping CompilationResponseDto findById(@PathVariable int id) {
-        return null;
+    @GetMapping("/{id}")
+    public CompilationResponseDto findById(@PathVariable int id) {
+        return compilationMapper.toResponse(compilationService.findById(id));
     }
 }

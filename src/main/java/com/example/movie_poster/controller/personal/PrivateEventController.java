@@ -39,11 +39,24 @@ public class PrivateEventController {
         return eventMapper.toFullDto(eventService.create(event, userId));
     }
 
+    @GetMapping("/{userId}/events/{eventId}")
+    public EventFullDto findFullEventInfoByUser(@PathVariable int userId,
+                                                @PathVariable int eventId) {
+        Event event = eventService.findFullEventInfoByUser(userId, eventId);
+        return eventMapper.toFullDto(event);
+    }
+
     @PatchMapping("/{userId}/events/{eventId}")
     public EventFullDto update(@PathVariable int userId,
                                @PathVariable int eventId,
                                @Valid @RequestBody UpdateEventUserRequest updateEvent) {
         Event event = eventMapper.fromUserUpdate(updateEvent);
         return eventMapper.toFullDto(eventService.updateByUser(event, userId, eventId));
+    }
+
+    @GetMapping("/{userId}/events/{eventId}/requests")
+    public List<ParticipationRequestDto> findParticipationRequestsForUserEvents(@PathVariable int userId,
+                                                                                @PathVariable int eventId) {
+        return null;
     }
 }

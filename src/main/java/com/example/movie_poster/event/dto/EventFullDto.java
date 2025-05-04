@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class EventFullDto {
 
-    private int id;
+    private Integer id;
     private String title;
     private String annotation;
     private String description;

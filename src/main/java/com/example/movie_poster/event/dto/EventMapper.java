@@ -48,8 +48,8 @@ public class EventMapper {
         eventFullDto.setState(event.getState());
         eventFullDto.setConfirmedRequests(event.getConfirmedRequests());
         eventFullDto.setViews(event.getViews());
-        //CategoryResponseDto category todo
-        //UserResponseDto initiator TODO
+        eventFullDto.setCategory(toResponse(event.getCategory()));
+        eventFullDto.setInitiator(toResponse(event.getInitiator()));
         return eventFullDto;
     }
     //Event -> EventShortDto toShortDto()

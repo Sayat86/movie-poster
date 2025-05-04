@@ -7,7 +7,9 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EventRepository extends JpaRepository<Event, Integer> {
     Page<Event> findByInitiatorId(Integer userId, Pageable pageable);
+    Optional<Event> findByIdAndInitiatorId(int eventId, int initiatorId);
 }

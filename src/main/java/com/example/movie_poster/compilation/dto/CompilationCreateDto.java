@@ -11,5 +11,5 @@ public class CompilationCreateDto {
     private Boolean pinned;
     @NotBlank(message = "Заголовок не может быть пустым")
     private String title;
-    private List<Integer> events; //?
+    private List<Integer> events;
 }

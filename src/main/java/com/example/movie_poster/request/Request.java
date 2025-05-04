@@ -15,9 +15,9 @@ import java.time.LocalDateTime;
 public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
     private LocalDateTime created;
-    private String status;
+    private RequestState status;
 
     @ManyToOne
     @JoinColumn(name = "event_id")

@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class EventShortDto {
 
-    private int id;
+    private Integer id;
     private String title;
     private String annotation;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

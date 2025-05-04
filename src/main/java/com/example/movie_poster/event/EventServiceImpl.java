@@ -25,6 +25,13 @@ public class EventServiceImpl implements EventService {
     private final CategoryRepository categoryRepository;
 
     @Override
+    public List<Event> findEventAddedByUserId(int userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Event> pageResult = eventRepository.findByInitiatorId(userId, pageable);
+        return pageResult.getContent();
+    }
+
+    @Override
     public Event create(Event event, int userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким ID не найден"));
@@ -37,6 +44,12 @@ public class EventServiceImpl implements EventService {
         event.setViews(0);
         event.setConfirmedRequests(0);
         return eventRepository.save(event);
+    }
+
+    @Override
+    public Event findFullEventInfoByUser(int userId, int eventId) {
+        return eventRepository.findByIdAndInitiatorId(eventId, userId)
+                .orElseThrow(() -> new NotFoundException("Событие не найдено или доступ запрещен"));
     }
 
     @Override
@@ -57,13 +70,6 @@ public class EventServiceImpl implements EventService {
         if (event.getAnnotation() != null) {
             existingEvent.setAnnotation(event.getAnnotation());
         }
-        return null;
-    }
-
-    @Override
-    public List<Event> findEventAddedByUserId(int userId, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<Event> pageResult = eventRepository.findByInitiatorId(userId, pageable);
-        return pageResult.getContent();
+        return eventRepository.save(existingEvent);
     }
 }

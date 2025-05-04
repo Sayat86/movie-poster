@@ -1,4 +1,4 @@
-package com.example.movie_poster.controller.everyone;
+package com.example.movie_poster.controller.admin;
 
 import com.example.movie_poster.event.EventService;
 import com.example.movie_poster.event.dto.EventFullDto;
@@ -11,8 +11,8 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/events")
-public class PublicEventController {
+@RequestMapping("/admin/events")
+public class AdminEventController {
     private final EventService eventService;
     private final EventMapper eventMapper;
 

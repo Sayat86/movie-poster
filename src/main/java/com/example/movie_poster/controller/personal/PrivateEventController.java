@@ -1,9 +1,9 @@
 package com.example.movie_poster.controller.personal;
 
 import com.example.movie_poster.event.Event;
-import com.example.movie_poster.event.EventRepository;
 import com.example.movie_poster.event.EventService;
 import com.example.movie_poster.event.dto.*;
+import com.example.movie_poster.request.dto.ParticipationRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

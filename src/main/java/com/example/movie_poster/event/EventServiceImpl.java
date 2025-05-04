@@ -72,4 +72,15 @@ public class EventServiceImpl implements EventService {
         }
         return eventRepository.save(existingEvent);
     }
+
+    @Override
+    public Event findById(int id) {
+        return eventRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Событие не найдено или доступ запрещен"));
+    }
+
+    @Override
+    public List<Event> findAll(String text, List<Integer> categories, boolean paid, String rangeStart, String rangeEnd, boolean onlyAvailable, String sort, int from, int size) {
+        return List.of();
+    }
 }

@@ -11,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class EventMapper {
@@ -86,6 +88,12 @@ public class EventMapper {
         }
         event.setTitle(updateEvent.getTitle());
         return event;
+    }
+
+    public List<EventShortDto> toShortDto(List<Event> events) {
+        return events.stream()
+                .map(this::toShortDto)
+                .collect(Collectors.toList());
     }
 
     private CategoryResponseDto toResponse(Category category) {

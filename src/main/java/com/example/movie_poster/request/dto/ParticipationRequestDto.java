@@ -1,4 +1,4 @@
-package com.example.movie_poster.event.dto;
+package com.example.movie_poster.request.dto;
 
 import com.example.movie_poster.request.RequestState;
 import lombok.AllArgsConstructor;

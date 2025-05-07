@@ -63,13 +63,50 @@ public class EventServiceImpl implements EventService {
         if (existingEvent.getState() == EventState.PUBLISHED) {
             throw new ConflictException("Опубликованное событие нельзя редактировать");
         }
+
         // - редактировать может только владелец события
+        if (existingEvent.getInitiator().getId() != userId) {
+            throw new ConflictException("Редактировать событие может только его инициатор");
+        }
+
         // - если дата указана, то она не должна быть раньше чем за 2 часа от текущего времени
+        if (event.getEventDate() != null) {
+            LocalDateTime nowPlus2Hours = LocalDateTime.now().plusHours(2);
+            if (event.getEventDate().isBefore(nowPlus2Hours)) {
+                throw new ConflictException("Дата и время события должны быть не ранее чем через 2 часа от текущего момента");
+            }
+            existingEvent.setEventDate(event.getEventDate());
+        }
+
         // - если категория указана, проверяем есть ли в базе данных, если нет - исключение
+        if (event.getCategory() != null) {
+            Category category = categoryRepository.findById(event.getCategory().getId())
+                    .orElseThrow(() -> new NotFoundException("Категория с таким ID не найдена"));
+            existingEvent.setCategory(category);
+        }
 
         if (event.getAnnotation() != null) {
             existingEvent.setAnnotation(event.getAnnotation());
         }
+        if (event.getDescription() != null) {
+            existingEvent.setDescription(event.getDescription());
+        }
+        if (event.getLocation() != null) {
+            existingEvent.setLocation(event.getLocation());
+        }
+        if (event.getPaid() != null) {
+            existingEvent.setPaid(event.getPaid());
+        }
+        if (event.getParticipantLimit() != null) {
+            existingEvent.setParticipantLimit(event.getParticipantLimit());
+        }
+        if (event.getTitle() != null) {
+            existingEvent.setTitle(event.getTitle());
+        }
+        if (event.getRequestModeration() != null) {
+            existingEvent.setRequestModeration(event.getRequestModeration());
+        }
+
         return eventRepository.save(existingEvent);
     }
 
@@ -80,7 +117,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAll(String text, List<Integer> categories, boolean paid, String rangeStart, String rangeEnd, boolean onlyAvailable, String sort, int from, int size) {
+    public List<Event> findAll(String text, List<Integer> categories, boolean paid, LocalDateTime rangeStart,
+                               LocalDateTime rangeEnd, boolean onlyAvailable, String sort, int from, int size) {
         return List.of();
+        //todo
     }
 }

@@ -7,6 +7,7 @@ import com.example.movie_poster.event.dto.EventShortDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -20,8 +21,8 @@ public class PublicEventController {
     public List<EventShortDto> findAll(@RequestParam String text,
                                        @RequestParam List<Integer> categories,
                                        @RequestParam boolean paid,
-                                       @RequestParam String rangeStart,
-                                       @RequestParam String rangeEnd,
+                                       @RequestParam LocalDateTime rangeStart,
+                                       @RequestParam LocalDateTime rangeEnd,
                                        @RequestParam boolean onlyAvailable,
                                        @RequestParam String sort,
                                        @RequestParam(defaultValue = "0") int from,

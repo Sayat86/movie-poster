@@ -58,5 +58,6 @@ public class PrivateEventController {
     public List<ParticipationRequestDto> findParticipationRequestsForUserEvents(@PathVariable int userId,
                                                                                 @PathVariable int eventId) {
         return null;
+        //todo
     }
 }

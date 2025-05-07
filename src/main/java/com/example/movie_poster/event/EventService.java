@@ -1,5 +1,6 @@
 package com.example.movie_poster.event;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public interface EventService {
@@ -8,6 +9,6 @@ public interface EventService {
     Event findFullEventInfoByUser(int userId, int eventId);
     Event updateByUser(Event event, int userId, int eventId);
     Event findById(int id);
-    List<Event> findAll(String text, List<Integer> categories, boolean paid, String rangeStart, String rangeEnd,
+    List<Event> findAll(String text, List<Integer> categories, boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd,
                         boolean onlyAvailable, String sort, int from, int size);
 }

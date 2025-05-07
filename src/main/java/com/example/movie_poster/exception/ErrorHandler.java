@@ -5,12 +5,27 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
 @RestControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFound(final NotFoundException e) {
-        return new ErrorResponse(e.getMessage());
+        List<String> errors = new ArrayList<>();
+        for (StackTraceElement stackTrace : e.getStackTrace()) {
+            errors.add(stackTrace.toString());
+        }
+
+        return new ErrorResponse(
+                errors,
+                e.getMessage(),
+                "Объект не найден",
+                HttpStatus.NOT_FOUND,
+                LocalDateTime.now()
+        );
     }
 
     @ExceptionHandler

@@ -13,3 +13,16 @@ public class CompilationCreateDto {
     private String title;
     private List<Integer> events;
 }
+
+// {
+//      "events": [1, 5, 6]
+// }
+
+// {
+//      "events": [
+//          {
+//              "id": 1,
+//          },
+//          {}
+//      ]
+// }

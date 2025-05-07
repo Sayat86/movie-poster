@@ -1,18 +1,35 @@
 package com.example.movie_poster.request;
 
+import com.example.movie_poster.event.Event;
+import com.example.movie_poster.event.EventRepository;
+import com.example.movie_poster.exception.NotFoundException;
+import com.example.movie_poster.user.User;
+import com.example.movie_poster.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
+    private final UserRepository userRepository;
+    private final EventRepository eventRepository;
 
     @Override
     public Request create(int userId, int eventId) {
-        return null;
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь не найден"));
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие не найдено"));
+        Request request = new Request();
+        request.setRequester(user);
+        request.setEvent(event);
+        request.setCreated(LocalDateTime.now());
+        request.setStatus(RequestState.PENDING);
+        return requestRepository.save(request);
     }
 
     @Override

@@ -3,6 +3,8 @@ package com.example.movie_poster.request.dto;
 import com.example.movie_poster.request.Request;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class RequestMapper {
     public ParticipationRequestDto toResponse(Request request) {
@@ -13,5 +15,12 @@ public class RequestMapper {
         dto.setRequester(request.getRequester().getId());
         dto.setEvent(request.getEvent().getId());
         return dto;
+    }
+
+
+    public List<ParticipationRequestDto> toResponse(List<Request> requests) {
+        return requests.stream()
+                .map(this::toResponse)
+                .toList();
     }
 }

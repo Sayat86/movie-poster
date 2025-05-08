@@ -2,6 +2,7 @@ package com.example.movie_poster.request;
 
 import com.example.movie_poster.event.Event;
 import com.example.movie_poster.event.EventRepository;
+import com.example.movie_poster.exception.ForbiddenException;
 import com.example.movie_poster.exception.NotFoundException;
 import com.example.movie_poster.user.User;
 import com.example.movie_poster.user.UserRepository;
@@ -34,11 +35,23 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public Request update(int userId, int requestId) {
-        return null;
+        Request request = requestRepository.findById(requestId)
+                .orElseThrow(() -> new NotFoundException("Запрос не найден"));
+
+        if (request.getRequester().getId() != userId) {
+            throw new ForbiddenException("Пользователь не может отменить чужой запрос");
+        }
+
+        if (request.getStatus() == RequestState.CANCELED) {
+            return request; // уже отменен
+        }
+
+        request.setStatus(RequestState.CANCELED);
+        return requestRepository.save(request);
     }
 
     @Override
     public List<Request> findAll(int userId) {
-        return List.of();
+        return requestRepository.findAll();
     }
 }

@@ -1,7 +1,6 @@
 package com.example.movie_poster.event;
 
 import com.example.movie_poster.category.Category;
-import com.example.movie_poster.compilation_events.CompilationEvents;
 import com.example.movie_poster.request.Request;
 import com.example.movie_poster.user.User;
 import jakarta.persistence.*;
@@ -53,8 +52,8 @@ public class Event {
     @JoinColumn(name = "initiator_id")
     private User initiator;
 
-    @OneToMany(mappedBy = "event")
-    private List<CompilationEvents> compilationEvents;
+//    @OneToMany(mappedBy = "event")
+//    private List<CompilationEvents> compilationEvents;
 
     @OneToMany(mappedBy = "event")
     private List<Request> requests;

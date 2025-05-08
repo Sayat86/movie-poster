@@ -20,6 +20,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
+        Optional<User> existingEmail = userRepository.findByEmail(user.getEmail());
+        if (existingEmail.isPresent()) {
+            throw new ConflictException("Пользователь с такой почтой уже существует");
+        }
         return userRepository.save(user);
     }
 

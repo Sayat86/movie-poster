@@ -17,6 +17,12 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public Category create(Category category) {
+        Optional<Category> existingCategory = categoryRepository.findByName(category.getName());
+
+        if (existingCategory.isPresent()) {
+            throw new ConflictException("Категория с таким именем уже существует");
+        }
+
         return categoryRepository.save(category);
     }
 

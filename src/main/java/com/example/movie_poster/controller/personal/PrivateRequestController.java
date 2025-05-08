@@ -17,8 +17,7 @@ public class PrivateRequestController {
 
     @GetMapping("/{userId}/requests")
     public List<ParticipationRequestDto> findAll(@PathVariable int userId) {
-        return null;
-        //toResponse
+        return requestMapper.toResponse(requestService.findAll(userId));
     }
 
     @PostMapping("/{userId}/requests/{eventId}")
@@ -30,6 +29,6 @@ public class PrivateRequestController {
     @PatchMapping("/{userId}/requests/{requestId}/cancel")
     public ParticipationRequestDto update(@PathVariable int userId,
                                           @PathVariable int requestId) {
-        return null;
+        return requestMapper.toResponse(requestService.update(userId, requestId));
     }
 }

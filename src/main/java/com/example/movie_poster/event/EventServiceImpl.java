@@ -2,8 +2,6 @@ package com.example.movie_poster.event;
 
 import com.example.movie_poster.category.Category;
 import com.example.movie_poster.category.CategoryRepository;
-import com.example.movie_poster.event.dto.EventCreateDto;
-import com.example.movie_poster.exception.BadRequestException;
 import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.NotFoundException;
 import com.example.movie_poster.user.User;
@@ -83,6 +81,29 @@ public class EventServiceImpl implements EventService {
             Category category = categoryRepository.findById(event.getCategory().getId())
                     .orElseThrow(() -> new NotFoundException("Категория с таким ID не найдена"));
             existingEvent.setCategory(category);
+        }
+
+        if (event.getState() != null) {
+            EventState newState = event.getState();
+            EventState currentState = existingEvent.getState();
+
+            // Публикация уже опубликованного
+            if (currentState == EventState.PUBLISHED && newState == EventState.PUBLISHED) {
+                throw new ConflictException("Событие уже опубликовано");
+            }
+
+            // Публикация отмененного
+            if (currentState == EventState.CANCELED && newState == EventState.PUBLISHED) {
+                throw new ConflictException("Нельзя опубликовать отмененное событие");
+            }
+
+            // Отмена опубликованного
+            if (currentState == EventState.PUBLISHED && newState == EventState.CANCELED) {
+                throw new ConflictException("Нельзя отменить уже опубликованное событие");
+            }
+
+            // если всё ок, обновляем состояние
+            existingEvent.setState(newState);
         }
 
         if (event.getAnnotation() != null) {

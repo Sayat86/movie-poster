@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface EventRepository extends JpaRepository<Event, Integer> {
     Page<Event> findByInitiatorId(Integer userId, Pageable pageable);
     Optional<Event> findByIdAndInitiatorId(int eventId, int initiatorId);
+    boolean existsByCategoryId(int categoryId);
 }

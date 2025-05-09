@@ -1,8 +1,10 @@
 package com.example.movie_poster.category;
 
 import com.example.movie_poster.category.dto.CategoryMapper;
+import com.example.movie_poster.event.EventRepository;
 import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.NotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
+    private final EventRepository eventRepository;
 
     @Override
     public Category create(Category category) {
@@ -48,7 +51,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteById(int id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Категория с таким ID не найдена"));
+
+        boolean hasEvents = eventRepository.existsByCategoryId(id);
+        if (hasEvents) {
+            throw new ConflictException("Нельзя удалить категорию, к которой привязаны события");
+        }
+
         categoryRepository.deleteById(id);
     }
 

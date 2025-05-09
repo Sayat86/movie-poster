@@ -21,9 +21,9 @@ create table categories
 create table events
 (
     id serial primary key,
-    title varchar(255) not null,
-    annotation varchar(255) not null,
-    description varchar(255) not null,
+    title varchar(120) not null,
+    annotation varchar(2000) not null,
+    description varchar(7000) not null,
     event_date timestamp with time zone not null,
     created_on timestamp with time zone not null,
     published_on timestamp with time zone,

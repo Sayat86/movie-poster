@@ -4,10 +4,12 @@ import com.example.movie_poster.request.RequestService;
 import com.example.movie_poster.request.dto.ParticipationRequestDto;
 import com.example.movie_poster.request.dto.RequestMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/users")
@@ -20,9 +22,10 @@ public class PrivateRequestController {
         return requestMapper.toResponse(requestService.findAll(userId));
     }
 
-    @PostMapping("/{userId}/requests/{eventId}")
+    @PostMapping("/{userId}/requests")
     public ParticipationRequestDto create(@PathVariable int userId,
-                                          @PathVariable int eventId) {
+                                          @RequestParam int eventId) {
+        log.info("eventId={}", eventId);
         return requestMapper.toResponse(requestService.create(userId, eventId));
     }
 

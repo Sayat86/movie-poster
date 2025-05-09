@@ -4,6 +4,7 @@ import com.example.movie_poster.category.Category;
 import com.example.movie_poster.category.dto.CategoryResponseDto;
 import com.example.movie_poster.event.Event;
 import com.example.movie_poster.event.EventState;
+import com.example.movie_poster.event.EventStateActionAdmin;
 import com.example.movie_poster.event.EventStateActionUser;
 import com.example.movie_poster.user.User;
 import com.example.movie_poster.user.dto.UserResponseDto;
@@ -87,6 +88,27 @@ public class EventMapper {
             event.setState(EventState.PENDING);
         }
         event.setTitle(updateEvent.getTitle());
+        return event;
+    }
+
+    public Event fromAdminUpdate(UpdateEventAdminRequest updateEventAdmin) {
+        Event event = new Event();
+        event.setAnnotation(updateEventAdmin.getAnnotation());
+        Category category = new Category();
+        category.setId(updateEventAdmin.getCategory());
+        event.setCategory(category);
+        event.setDescription(updateEventAdmin.getDescription());
+        event.setEventDate(updateEventAdmin.getEventDate());
+        event.setLocation(updateEventAdmin.getLocation());
+        event.setPaid(updateEventAdmin.getPaid());
+        event.setParticipantLimit(updateEventAdmin.getParticipantLimit());
+        event.setRequestModeration(updateEventAdmin.getRequestModeration());
+        event.setTitle(updateEventAdmin.getTitle());
+        if (updateEventAdmin.getStateAction() == EventStateActionAdmin.PUBLISH_EVENT) {
+            event.setState(EventState.PUBLISHED);
+        } else {
+            event.setState(EventState.CANCELED);
+        }
         return event;
     }
 

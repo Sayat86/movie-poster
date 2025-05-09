@@ -6,6 +6,7 @@ import com.example.movie_poster.event.dto.*;
 import com.example.movie_poster.request.dto.ParticipationRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,6 +34,7 @@ public class PrivateEventController {
     }
 
     @PostMapping("/{userId}/events")
+    @ResponseStatus(HttpStatus.CREATED)
     public EventFullDto create(@PathVariable int userId,
                                @Valid @RequestBody EventCreateDto eventCreate) {
         Event event = eventMapper.fromCreate(eventCreate);

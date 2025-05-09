@@ -41,6 +41,7 @@ public class EventServiceImpl implements EventService {
         event.setState(EventState.PENDING);
         event.setViews(0);
         event.setConfirmedRequests(0);
+        event.setIsPublished(false);
         return eventRepository.save(event);
     }
 
@@ -55,7 +56,7 @@ public class EventServiceImpl implements EventService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким ID не найден"));
         Event existingEvent = eventRepository.findById(eventId)
-                        .orElseThrow(() -> new NotFoundException("Событие с таким ID не найдено"));
+                .orElseThrow(() -> new NotFoundException("Событие с таким ID не найдено"));
         // Проверка
         // - опубликованное событие нельзя редактировать
         if (existingEvent.getState() == EventState.PUBLISHED) {
@@ -128,6 +129,72 @@ public class EventServiceImpl implements EventService {
             existingEvent.setRequestModeration(event.getRequestModeration());
         }
 
+        return eventRepository.save(existingEvent);
+    }
+
+    @Override
+    public Event updateByAdmin(int eventId, Event event) {
+        Event existingEvent = findById(eventId);
+        if (event.getEventDate() != null) {
+            LocalDateTime nowPlus2Hours = LocalDateTime.now().plusHours(2);
+            if (event.getEventDate().isBefore(nowPlus2Hours)) {
+                throw new ConflictException("Дата и время события должны быть не ранее чем через 2 часа от текущего момента");
+            }
+            existingEvent.setEventDate(event.getEventDate());
+        }
+
+        // - если категория указана, проверяем есть ли в базе данных, если нет - исключение
+        if (event.getCategory().getId() != null) {
+            Category category = categoryRepository.findById(event.getCategory().getId())
+                    .orElseThrow(() -> new NotFoundException("Категория с таким ID не найдена"));
+            existingEvent.setCategory(category);
+        }
+
+        if (event.getState() != null) {
+            EventState newState = event.getState();
+            EventState currentState = existingEvent.getState();
+
+            // Публикация уже опубликованного
+            if (currentState == EventState.PUBLISHED && newState == EventState.PUBLISHED) {
+                throw new ConflictException("Событие уже опубликовано");
+            }
+
+            // Публикация отмененного
+            if (currentState == EventState.CANCELED && newState == EventState.PUBLISHED) {
+                throw new ConflictException("Нельзя опубликовать отмененное событие");
+            }
+
+            // Отмена опубликованного
+            if (currentState == EventState.PUBLISHED && newState == EventState.CANCELED) {
+                throw new ConflictException("Нельзя отменить уже опубликованное событие");
+            }
+
+            // если всё ок, обновляем состояние
+            existingEvent.setState(newState);
+        }
+
+
+        if (event.getAnnotation() != null) {
+            existingEvent.setAnnotation(event.getAnnotation());
+        }
+        if (event.getDescription() != null) {
+            existingEvent.setDescription(event.getDescription());
+        }
+        if (event.getLocation() != null) {
+            existingEvent.setLocation(event.getLocation());
+        }
+        if (event.getPaid() != null) {
+            existingEvent.setPaid(event.getPaid());
+        }
+        if (event.getParticipantLimit() != null) {
+            existingEvent.setParticipantLimit(event.getParticipantLimit());
+        }
+        if (event.getTitle() != null) {
+            existingEvent.setTitle(event.getTitle());
+        }
+        if (event.getRequestModeration() != null) {
+            existingEvent.setRequestModeration(event.getRequestModeration());
+        }
         return eventRepository.save(existingEvent);
     }
 

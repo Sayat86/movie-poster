@@ -2,10 +2,13 @@ package com.example.movie_poster.event.dto;
 
 import com.example.movie_poster.event.EventStateActionAdmin;
 import com.example.movie_poster.event.Location;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -15,8 +18,9 @@ public class UpdateEventAdminRequest {
     private String title;
     private String annotation;
     private String description;
-    private String eventDate;
-    private Long category;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime eventDate;
+    private Integer category;
     private Boolean paid;
     private Integer participantLimit;
     private Boolean requestModeration;

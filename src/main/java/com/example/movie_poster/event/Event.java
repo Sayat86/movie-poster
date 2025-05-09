@@ -52,9 +52,6 @@ public class Event {
     @JoinColumn(name = "initiator_id")
     private User initiator;
 
-//    @OneToMany(mappedBy = "event")
-//    private List<CompilationEvents> compilationEvents;
-
     @OneToMany(mappedBy = "event")
     private List<Request> requests;
 }

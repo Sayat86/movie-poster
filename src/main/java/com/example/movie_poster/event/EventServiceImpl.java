@@ -173,7 +173,6 @@ public class EventServiceImpl implements EventService {
             existingEvent.setState(newState);
         }
 
-
         if (event.getAnnotation() != null) {
             existingEvent.setAnnotation(event.getAnnotation());
         }

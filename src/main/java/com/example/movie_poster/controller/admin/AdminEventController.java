@@ -20,13 +20,13 @@ public class AdminEventController {
     private final EventMapper eventMapper;
 
     @GetMapping
-    public List<EventShortDto> findAll(@RequestParam String text,
-                                       @RequestParam List<Integer> categories,
-                                       @RequestParam boolean paid,
-                                       @RequestParam LocalDateTime rangeStart,
-                                       @RequestParam LocalDateTime rangeEnd,
-                                       @RequestParam boolean onlyAvailable,
-                                       @RequestParam String sort,
+    public List<EventShortDto> findAll(@RequestParam(required = false) String text,
+                                       @RequestParam(required = false) List<Integer> categories,
+                                       @RequestParam(required = false) boolean paid,
+                                       @RequestParam(required = false) LocalDateTime rangeStart,
+                                       @RequestParam(required = false) LocalDateTime rangeEnd,
+                                       @RequestParam(required = false) boolean onlyAvailable,
+                                       @RequestParam(required = false) String sort,
                                        @RequestParam(defaultValue = "0") int from,
                                        @RequestParam(defaultValue = "10") int size) {
         int page = from / size;

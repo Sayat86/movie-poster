@@ -3,6 +3,7 @@ package com.example.movie_poster.controller.personal;
 import com.example.movie_poster.event.Event;
 import com.example.movie_poster.event.EventService;
 import com.example.movie_poster.event.dto.*;
+import com.example.movie_poster.request.RequestService;
 import com.example.movie_poster.request.dto.ParticipationRequestDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import static com.example.movie_poster.utils.RequestConstants.DEFAULT_SIZE;
 public class PrivateEventController {
     private final EventService eventService;
     private final EventMapper eventMapper;
+    private final RequestService requestService;
 
     @GetMapping("/{userId}/events")
     public List<EventShortDto> findEventAddByUserId(@PathVariable int userId,
@@ -59,7 +61,6 @@ public class PrivateEventController {
     @GetMapping("/{userId}/events/{eventId}/requests")
     public List<ParticipationRequestDto> findParticipationRequestsForUserEvents(@PathVariable int userId,
                                                                                 @PathVariable int eventId) {
-        return null;
-        //todo
+        return requestService.findEventRequests(userId, eventId);
     }
 }

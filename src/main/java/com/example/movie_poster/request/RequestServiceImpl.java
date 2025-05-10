@@ -6,6 +6,8 @@ import com.example.movie_poster.event.EventState;
 import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.ForbiddenException;
 import com.example.movie_poster.exception.NotFoundException;
+import com.example.movie_poster.request.dto.ParticipationRequestDto;
+import com.example.movie_poster.request.dto.RequestMapper;
 import com.example.movie_poster.user.User;
 import com.example.movie_poster.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,7 @@ public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
     private final EventRepository eventRepository;
+    private final RequestMapper requestMapper;
 
     @Override
     public Request create(int userId, int eventId) {
@@ -78,5 +81,21 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<Request> findAll(int userId) {
         return requestRepository.findAll();
+    }
+
+    @Override
+    public List<ParticipationRequestDto> findEventRequests(int userId, int eventId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("Пользователь с ID " + userId + " не найден"));
+
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие с ID " + eventId + " не найдено"));
+
+        if (!event.getInitiator().getId().equals(userId)) {
+            throw new ForbiddenException("Только инициатор события может просматривать запросы на участие");
+        }
+
+        List<Request> requests = requestRepository.findAllByEventId(eventId);
+        return requestMapper.toResponse(requests);
     }
 }

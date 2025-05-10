@@ -7,6 +7,7 @@ import com.example.movie_poster.event.dto.EventMapper;
 import com.example.movie_poster.event.dto.EventShortDto;
 import com.example.movie_poster.event.dto.UpdateEventAdminRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -22,11 +23,11 @@ public class AdminEventController {
     @GetMapping
     public List<EventShortDto> findAll(@RequestParam(required = false) String text,
                                        @RequestParam(required = false) List<Integer> categories,
-                                       @RequestParam(required = false) boolean paid,
-                                       @RequestParam(required = false) LocalDateTime rangeStart,
-                                       @RequestParam(required = false) LocalDateTime rangeEnd,
-                                       @RequestParam(required = false) boolean onlyAvailable,
-                                       @RequestParam(required = false) String sort,
+                                       @RequestParam(required = false) Boolean paid,
+                                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime rangeStart,
+                                       @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime rangeEnd,
+                                       @RequestParam(required = false) Boolean onlyAvailable,
+                                       @RequestParam(defaultValue = "EVENT_DATE") String sort,
                                        @RequestParam(defaultValue = "0") int from,
                                        @RequestParam(defaultValue = "10") int size) {
         int page = from / size;

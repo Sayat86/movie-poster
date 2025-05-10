@@ -2,6 +2,7 @@ package com.example.movie_poster.event;
 
 import com.example.movie_poster.category.Category;
 import com.example.movie_poster.category.CategoryRepository;
+import com.example.movie_poster.exception.BadRequestException;
 import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.NotFoundException;
 import com.example.movie_poster.user.User;
@@ -10,10 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -35,6 +38,10 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Пользователь с таким ID не найден"));
         Category category = categoryRepository.findById(event.getCategory().getId())
                 .orElseThrow(() -> new NotFoundException("Категория с таким ID не найдена"));
+        // Проверка на отрицательный лимит участников
+        if (event.getParticipantLimit() != null && event.getParticipantLimit() < 0) {
+            throw new BadRequestException("Лимит участников не может быть отрицательным");
+        }
         event.setCategory(category);
         event.setInitiator(user);
         event.setCreatedOn(LocalDateTime.now());
@@ -118,6 +125,10 @@ public class EventServiceImpl implements EventService {
         }
         if (event.getPaid() != null) {
             existingEvent.setPaid(event.getPaid());
+        }
+        // Проверка на отрицательный лимит участников
+        if (event.getParticipantLimit() != null && event.getParticipantLimit() < 0) {
+            throw new BadRequestException("Лимит участников не может быть отрицательным");
         }
         if (event.getParticipantLimit() != null) {
             existingEvent.setParticipantLimit(event.getParticipantLimit());
@@ -206,7 +217,26 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> findAll(String text, List<Integer> categories, boolean paid, LocalDateTime rangeStart,
                                LocalDateTime rangeEnd, boolean onlyAvailable, String sort, int from, int size) {
-        return List.of();
-        //todo
+        Sort sorting = Sort.unsorted();
+        if ("EVENT_DATE".equalsIgnoreCase(sort)) {
+            sorting = Sort.by("eventDate").ascending();
+        } else if ("VIEWS".equalsIgnoreCase(sort)) {
+            sorting = Sort.by("views").descending();
+        }
+
+        Pageable pageable = PageRequest.of(from / size, size, sorting);
+
+        Page<Event> eventsPage = eventRepository.findAllWithFilters(text, categories, paid, rangeStart, rangeEnd, pageable);
+
+        List<Event> events = eventsPage.getContent();
+
+        if (onlyAvailable) {
+            events = events.stream()
+                    .filter(event -> event.getParticipantLimit() == 0 ||
+                            event.getConfirmedRequests() < event.getParticipantLimit())
+                    .collect(Collectors.toList());
+        }
+
+        return events;
     }
 }

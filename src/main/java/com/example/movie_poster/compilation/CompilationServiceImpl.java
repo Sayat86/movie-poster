@@ -1,6 +1,8 @@
 package com.example.movie_poster.compilation;
 
 import com.example.movie_poster.compilation.dto.CompilationMapper;
+import com.example.movie_poster.event.Event;
+import com.example.movie_poster.event.EventRepository;
 import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,7 @@ import java.util.Optional;
 public class CompilationServiceImpl implements CompilationService {
     private final CompilationRepository compilationRepository;
     private final CompilationMapper compilationMapper;
+    private final EventRepository eventRepository;
 
     @Override
     public List<Compilation> findAll() {
@@ -28,7 +31,11 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public Compilation create(Compilation compilation) {
-        return compilationRepository.save(compilation);
+        // todo
+        List<Event> events = eventRepository.findAllById(compilation.getEvents().stream().map(Event::getId).toList());
+        compilationRepository.save(compilation);
+        compilation.setEvents(events);
+        return compilation;
     }
 
     @Override
@@ -48,6 +55,9 @@ public class CompilationServiceImpl implements CompilationService {
         }
         Compilation existingCompilation = findById(id);
         compilationMapper.merge(existingCompilation, updateCompilation);
+        // todo: переделать может быть дубли событий
+        existingCompilation.getEvents().addAll(updateCompilation.getEvents());
+
         return compilationRepository.save(existingCompilation);
     }
 }

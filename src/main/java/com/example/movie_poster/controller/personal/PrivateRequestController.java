@@ -5,6 +5,7 @@ import com.example.movie_poster.request.dto.ParticipationRequestDto;
 import com.example.movie_poster.request.dto.RequestMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,6 +24,7 @@ public class PrivateRequestController {
     }
 
     @PostMapping("/{userId}/requests")
+    @ResponseStatus(HttpStatus.CREATED)
     public ParticipationRequestDto create(@PathVariable int userId,
                                           @RequestParam int eventId) {
         log.info("eventId={}", eventId);

@@ -26,8 +26,8 @@ public class PrivateEventController {
 
     @GetMapping("/{userId}/events")
     public List<EventShortDto> findEventAddByUserId(@PathVariable int userId,
-                                                   @RequestParam(defaultValue = DEFAULT_FROM) int from,
-                                                   @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
+                                                    @RequestParam(defaultValue = DEFAULT_FROM) int from,
+                                                    @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
         int page = from / size;
         return eventService.findEventAddedByUserId(userId, page, size)
                 .stream()
@@ -59,8 +59,19 @@ public class PrivateEventController {
     }
 
     @GetMapping("/{userId}/events/{eventId}/requests")
-    public List<ParticipationRequestDto> findParticipationRequestsForUserEvents(@PathVariable int userId,
-                                                                                @PathVariable int eventId) {
+    public List<ParticipationRequestDto> findParticipationRequestsForUserEvents(
+            @PathVariable int userId,
+            @PathVariable int eventId
+    ) {
         return requestService.findEventRequests(userId, eventId);
+    }
+
+    @PatchMapping("/{userId}/events/{eventId}/requests")
+    public EventRequestStatusUpdateResult updateEventRequests(
+            @PathVariable int userId,
+            @PathVariable int eventId,
+            @RequestBody @Valid EventRequestStatusUpdateRequest updateRequest
+    ) {
+        return requestService.updateEventRequests(userId, eventId, updateRequest);
     }
 }

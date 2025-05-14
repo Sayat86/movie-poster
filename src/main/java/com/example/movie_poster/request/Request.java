@@ -17,6 +17,7 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private LocalDateTime created;
+    @Enumerated(value = EnumType.STRING)
     private RequestState status;
 
     @ManyToOne

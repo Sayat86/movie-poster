@@ -85,7 +85,7 @@ public class EventServiceImpl implements EventService {
         }
 
         // - если категория указана, проверяем есть ли в базе данных, если нет - исключение
-        if (event.getCategory() != null) {
+        if (event.getCategory().getId() != null) {
             Category category = categoryRepository.findById(event.getCategory().getId())
                     .orElseThrow(() -> new NotFoundException("Категория с таким ID не найдена"));
             existingEvent.setCategory(category);

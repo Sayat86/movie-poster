@@ -3,6 +3,8 @@ package com.example.movie_poster.request;
 import com.example.movie_poster.event.Event;
 import com.example.movie_poster.event.EventRepository;
 import com.example.movie_poster.event.EventState;
+import com.example.movie_poster.event.dto.EventRequestStatusUpdateRequest;
+import com.example.movie_poster.event.dto.EventRequestStatusUpdateResult;
 import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.ForbiddenException;
 import com.example.movie_poster.exception.NotFoundException;
@@ -97,5 +99,10 @@ public class RequestServiceImpl implements RequestService {
 
         List<Request> requests = requestRepository.findAllByEventId(eventId);
         return requestMapper.toResponse(requests);
+    }
+
+    @Override
+    public EventRequestStatusUpdateResult updateEventRequests(int userId, int eventId, EventRequestStatusUpdateRequest updateRequest) {
+        return null;
     }
 }

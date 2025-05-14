@@ -32,7 +32,7 @@ public class Event {
     private Integer participantLimit;
     @Column(name = "request_moderation")
     private Boolean requestModeration;
-    @Enumerated
+    @Enumerated(value = EnumType.STRING)
     private EventState state;
     @Embedded
     @AttributeOverride(name = "lat", column = @Column(name = "location_lat"))

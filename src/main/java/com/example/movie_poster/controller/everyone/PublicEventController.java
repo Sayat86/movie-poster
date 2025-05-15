@@ -4,6 +4,7 @@ import com.example.movie_poster.event.EventService;
 import com.example.movie_poster.event.dto.EventFullDto;
 import com.example.movie_poster.event.dto.EventMapper;
 import com.example.movie_poster.event.dto.EventShortDto;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,12 @@ public class PublicEventController {
     }
 
     @GetMapping("/{id}")
-    public EventFullDto findById(@PathVariable int id) {
-        return eventMapper.toFullDto(eventService.findById(id));
+    public EventFullDto findById(@PathVariable int id, HttpServletRequest request) {
+        String ip = request.getHeader("X-Forwarded-For");
+        if (ip == null || ip.isBlank()) {
+            ip = request.getRemoteAddr();
+        }
+
+        return eventMapper.toFullDto(eventService.findById(id, ip));
     }
 }

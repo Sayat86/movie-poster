@@ -18,24 +18,8 @@ public class PrivateUserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @GetMapping("/{id}/requests")
+    @GetMapping("/{id}")
     public UserResponseDto findById(@PathVariable int id) {
         return userMapper.toResponse(userService.findById(id));
     }
-
-//    @GetMapping("/{id}/events")
-//    public List<UserResponseDto> findAllEventsByUserId(@RequestHeader int ids,
-//                                                       @RequestParam(defaultValue = DEFAULT_FROM) int from,
-//                                                       @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
-//        int page = from / size;
-//        return null;
-//    }
-
-//    @GetMapping
-//    public List<UserResponseDto> findAll(@RequestHeader int ids,
-//                                         @RequestParam(defaultValue = DEFAULT_FROM) int from,
-//                                         @RequestParam(defaultValue = DEFAULT_SIZE) int size) {
-//        int page = from / size;
-//        return userMapper.toResponse(userService.findAll(ids, page, size));
-//    }
 }

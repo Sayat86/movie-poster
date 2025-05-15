@@ -72,6 +72,10 @@ public class RequestServiceImpl implements RequestService {
             throw new ForbiddenException("Пользователь не может отменить чужой запрос");
         }
 
+        if (request.getStatus() == RequestState.CONFIRMED) {
+            throw new ConflictException("Нельзя отменить уже подтверждённую заявку.");
+        }
+
         if (request.getStatus() == RequestState.CANCELED) {
             return request; // уже отменен
         }

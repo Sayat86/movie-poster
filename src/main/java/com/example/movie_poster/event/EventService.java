@@ -9,9 +9,9 @@ public interface EventService {
     Event findFullEventInfoByUser(int userId, int eventId);
     Event updateByUser(Event event, int userId, int eventId);
     Event updateByAdmin(int eventId, Event event);
-    Event findById(int id);
-    List<Event> findAllPublic(String text, List<Integer> categories, boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                        boolean onlyAvailable, String sort, int from, int size);
+    Event findById(int id, String ipAddress);
+    List<Event> findAllPublic(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart,
+                              LocalDateTime rangeEnd, boolean onlyAvailable, String sort, int from, int size);
     List<Event> findAllAdmin(Integer users, List<EventState> states, List<Integer> categories,
                              LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size);
 }

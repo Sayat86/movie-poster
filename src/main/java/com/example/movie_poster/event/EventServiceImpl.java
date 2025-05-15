@@ -16,7 +16,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.criteria.Predicate;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,6 +27,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+    private final EventViewRepository eventViewRepository;
 
     @Override
     public List<Event> findEventAddedByUserId(int userId, int page, int size) {
@@ -146,7 +149,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     public Event updateByAdmin(int eventId, Event event) {
-        Event existingEvent = findById(eventId);
+        Event existingEvent = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие с таким ID не найдена"));
         if (event.getEventDate() != null) {
             LocalDateTime nowPlus2Hours = LocalDateTime.now().plusHours(2);
             if (event.getEventDate().isBefore(nowPlus2Hours)) {
@@ -210,26 +214,68 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event findById(int id) {
-        return eventRepository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Событие не найдено или доступ запрещен"));
+    public Event findById(int id, String ipAddress) {
+        Event event = eventRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Событие не найдено"));
+
+        if (event.getState() != EventState.PUBLISHED) {
+            throw new NotFoundException("Событие не найдено или ещё не опубликовано");
+        }
+
+        if (!eventViewRepository.existsByEventAndIpAddress(event, ipAddress)) {
+            EventView view = new EventView();
+            view.setEvent(event);
+            view.setIpAddress(ipAddress);
+            view.setViewedAt(LocalDateTime.now());
+            eventViewRepository.save(view);
+
+            event.setViews(event.getViews() + 1);
+            eventRepository.save(event);
+        }
+
+        return event;
     }
 
     @Override
-    public List<Event> findAllPublic(String text, List<Integer> categories, boolean paid, LocalDateTime rangeStart,
-                               LocalDateTime rangeEnd, boolean onlyAvailable, String sort, int from, int size) {
-        Sort sorting = Sort.unsorted();
-        if ("EVENT_DATE".equalsIgnoreCase(sort)) {
-            sorting = Sort.by("eventDate").ascending();
-        } else if ("VIEWS".equalsIgnoreCase(sort)) {
-            sorting = Sort.by("views").descending();
-        }
+    public List<Event> findAllPublic(String text, List<Integer> categories, Boolean paid,
+                                     LocalDateTime rangeStart, LocalDateTime rangeEnd,
+                                     boolean onlyAvailable, String sort, int from, int size) {
 
-        Pageable pageable = PageRequest.of(from / size, size, sorting);
+        Pageable pageable = PageRequest.of(from / size, size, getSort(sort));
 
-        Page<Event> eventsPage = eventRepository.findAllWithFilters(text, categories, paid, rangeStart, rangeEnd, pageable);
+        Specification<Event> spec = Specification.where((root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
-        List<Event> events = eventsPage.getContent();
+            predicates.add(cb.equal(root.get("state"), EventState.PUBLISHED));
+
+            if (text != null && !text.isBlank()) {
+                String likeText = "%" + text.toLowerCase() + "%";
+                predicates.add(cb.or(
+                        cb.like(cb.lower(root.get("annotation")), likeText),
+                        cb.like(cb.lower(root.get("description")), likeText)
+                ));
+            }
+
+            if (categories != null && !categories.isEmpty()) {
+                predicates.add(root.get("category").get("id").in(categories));
+            }
+
+            if (paid != null) {
+                predicates.add(cb.equal(root.get("paid"), paid));
+            }
+
+            if (rangeStart != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("eventDate"), rangeStart));
+            }
+
+            if (rangeEnd != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("eventDate"), rangeEnd));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        });
+
+        List<Event> events = eventRepository.findAll(spec, pageable).getContent();
 
         if (onlyAvailable) {
             events = events.stream()
@@ -239,6 +285,15 @@ public class EventServiceImpl implements EventService {
         }
 
         return events;
+    }
+
+    private Sort getSort(String sort) {
+        if ("EVENT_DATE".equalsIgnoreCase(sort)) {
+            return Sort.by("eventDate").ascending();
+        } else if ("VIEWS".equalsIgnoreCase(sort)) {
+            return Sort.by("views").descending();
+        }
+        return Sort.unsorted();
     }
 
     @Override

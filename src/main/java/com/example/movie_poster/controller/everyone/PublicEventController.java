@@ -19,7 +19,7 @@ public class PublicEventController {
     private final EventMapper eventMapper;
 
     @GetMapping
-    public List<EventShortDto> findAll(@RequestParam(required = false) String text,
+    public List<EventShortDto> findAllPublic(@RequestParam(required = false) String text,
                                        @RequestParam(required = false) List<Integer> categories,
                                        @RequestParam(required = false) boolean paid,
                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
@@ -29,7 +29,7 @@ public class PublicEventController {
                                        @RequestParam(defaultValue = "0") int from,
                                        @RequestParam(defaultValue = "10") int size) {
         int page = from / size;
-        return eventMapper.toShortDto(eventService.findAll(text, categories, paid, rangeStart,
+        return eventMapper.toShortDto(eventService.findAllPublic(text, categories, paid, rangeStart,
                 rangeEnd, onlyAvailable, sort, page, size));
     }
 

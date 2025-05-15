@@ -118,6 +118,12 @@ public class EventMapper {
                 .collect(Collectors.toList());
     }
 
+    public List<EventFullDto> toFullDto(List<Event> events) {
+        return events.stream()
+                .map(this::toFullDto)
+                .collect(Collectors.toList());
+    }
+
     private CategoryResponseDto toResponse(Category category) {
         CategoryResponseDto categoryResponse = new CategoryResponseDto();
         categoryResponse.setId(category.getId());

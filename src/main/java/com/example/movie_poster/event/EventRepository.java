@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface EventRepository extends JpaRepository<Event, Integer> {
+public interface EventRepository extends JpaRepository<Event, Integer>, JpaSpecificationExecutor<Event>{
     Page<Event> findByInitiatorId(Integer userId, Pageable pageable);
     Optional<Event> findByIdAndInitiatorId(int eventId, int initiatorId);
     boolean existsByCategoryId(int categoryId);
@@ -31,4 +31,7 @@ public interface EventRepository extends JpaRepository<Event, Integer> {
                                    @Param("rangeStart") LocalDateTime rangeStart,
                                    @Param("rangeEnd") LocalDateTime rangeEnd,
                                    Pageable pageable);
+
+   // Page<Event> findAllAdminWithFilters(Integer users, List<EventState> states, List<Integer> categories,
+   //                                     LocalDateTime rangeStart, LocalDateTime rangeEnd, Pageable pageable);
 }

@@ -10,6 +10,8 @@ public interface EventService {
     Event updateByUser(Event event, int userId, int eventId);
     Event updateByAdmin(int eventId, Event event);
     Event findById(int id);
-    List<Event> findAll(String text, List<Integer> categories, boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd,
+    List<Event> findAllPublic(String text, List<Integer> categories, boolean paid, LocalDateTime rangeStart, LocalDateTime rangeEnd,
                         boolean onlyAvailable, String sort, int from, int size);
+    List<Event> findAllAdmin(Integer users, List<EventState> states, List<Integer> categories,
+                             LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size);
 }

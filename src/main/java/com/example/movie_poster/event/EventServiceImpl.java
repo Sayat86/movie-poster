@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -215,7 +216,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAll(String text, List<Integer> categories, boolean paid, LocalDateTime rangeStart,
+    public List<Event> findAllPublic(String text, List<Integer> categories, boolean paid, LocalDateTime rangeStart,
                                LocalDateTime rangeEnd, boolean onlyAvailable, String sort, int from, int size) {
         Sort sorting = Sort.unsorted();
         if ("EVENT_DATE".equalsIgnoreCase(sort)) {
@@ -238,5 +239,41 @@ public class EventServiceImpl implements EventService {
         }
 
         return events;
+    }
+
+    @Override
+    public List<Event> findAllAdmin(Integer users, List<EventState> states, List<Integer> categories,
+                                    LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
+
+        Pageable pageable = PageRequest.of(from / size, size);
+
+        Specification<Event> spec = Specification.where(null);
+
+        if (users != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.equal(root.get("initiator").get("id"), users));
+        }
+
+        if (states != null && !states.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    root.get("state").in(states));
+        }
+
+        if (categories != null && !categories.isEmpty()) {
+            spec = spec.and((root, query, cb) ->
+                    root.get("category").get("id").in(categories));
+        }
+
+        if (rangeStart != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.greaterThanOrEqualTo(root.get("eventDate"), rangeStart));
+        }
+
+        if (rangeEnd != null) {
+            spec = spec.and((root, query, cb) ->
+                    cb.lessThanOrEqualTo(root.get("eventDate"), rangeEnd));
+        }
+
+        return eventRepository.findAll(spec, pageable).getContent();
     }
 }

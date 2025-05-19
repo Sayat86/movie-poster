@@ -72,6 +72,7 @@ public class PrivateEventController {
             @PathVariable int eventId,
             @RequestBody @Valid EventRequestStatusUpdateRequest updateRequest
     ) {
-        return requestService.updateEventRequests(userId, eventId, updateRequest);
+        EventRequestStatusUpdateResult eventRequestStatusUpdateResult = requestService.updateEventRequests(userId, eventId, updateRequest);
+        return eventRequestStatusUpdateResult;
     }
 }

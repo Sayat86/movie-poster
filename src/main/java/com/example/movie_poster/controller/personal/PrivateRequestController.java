@@ -19,8 +19,8 @@ public class PrivateRequestController {
     private final RequestMapper requestMapper;
 
     @GetMapping("/{userId}/requests")
-    public List<ParticipationRequestDto> findAll(@PathVariable int userId) {
-        return requestMapper.toResponse(requestService.findAll(userId));
+    public List<ParticipationRequestDto> findByRequesterId(@PathVariable int userId) {
+        return requestMapper.toResponse(requestService.findByRequesterId(userId));
     }
 
     @PostMapping("/{userId}/requests")

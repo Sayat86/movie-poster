@@ -50,8 +50,7 @@ public class RequestServiceImpl implements RequestService {
         }
 
         // 4. Проверка на лимит участников
-        Integer confirmedRequests = requestRepository.countByEventIdAndStatus(eventId, RequestState.CONFIRMED);
-        if (event.getParticipantLimit() > 0 && confirmedRequests >= event.getParticipantLimit()) {
+        if (event.getParticipantLimit() > 0 && event.getConfirmedRequests() >= event.getParticipantLimit()) {
             throw new ConflictException("Лимит участников исчерпан.");
         }
 
@@ -59,7 +58,13 @@ public class RequestServiceImpl implements RequestService {
         request.setRequester(user);
         request.setEvent(event);
         request.setCreated(LocalDateTime.now());
-        request.setStatus(RequestState.PENDING);
+        if (event.getParticipantLimit() == 0) {
+            request.setStatus(RequestState.CONFIRMED);
+        } else {
+            request.setStatus(RequestState.PENDING);
+        }
+        event.setConfirmedRequests(event.getConfirmedRequests() + 1);
+        eventRepository.save(event);
         return requestRepository.save(request);
     }
 
@@ -85,8 +90,8 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public List<Request> findAll(int userId) {
-        return requestRepository.findAll();
+    public List<Request> findByRequesterId(int userId) {
+        return requestRepository.findByRequesterId(userId);
     }
 
     @Override
@@ -108,5 +113,6 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public EventRequestStatusUpdateResult updateEventRequests(int userId, int eventId, EventRequestStatusUpdateRequest updateRequest) {
         return null;
+        //todo
     }
 }

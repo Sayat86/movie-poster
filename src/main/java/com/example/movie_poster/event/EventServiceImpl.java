@@ -27,7 +27,6 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-    private final EventViewRepository eventViewRepository;
 
     @Override
     public List<Event> findEventAddedByUserId(int userId, int page, int size) {
@@ -83,7 +82,7 @@ public class EventServiceImpl implements EventService {
         if (event.getEventDate() != null) {
             LocalDateTime nowPlus2Hours = LocalDateTime.now().plusHours(2);
             if (event.getEventDate().isBefore(nowPlus2Hours)) {
-                throw new ConflictException("Дата и время события должны быть не ранее чем через 2 часа от текущего момента");
+                throw new BadRequestException("Дата и время события должны быть не ранее чем через 2 часа от текущего момента");
             }
             existingEvent.setEventDate(event.getEventDate());
         }
@@ -153,8 +152,9 @@ public class EventServiceImpl implements EventService {
                 .orElseThrow(() -> new NotFoundException("Событие с таким ID не найдена"));
         if (event.getEventDate() != null) {
             LocalDateTime nowPlus2Hours = LocalDateTime.now().plusHours(2);
+
             if (event.getEventDate().isBefore(nowPlus2Hours)) {
-                throw new ConflictException("Дата и время события должны быть не ранее чем через 2 часа от текущего момента");
+                throw new BadRequestException("Дата и время события должны быть не ранее чем через 2 часа от текущего момента");
             }
             existingEvent.setEventDate(event.getEventDate());
         }
@@ -222,16 +222,16 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundException("Событие не найдено или ещё не опубликовано");
         }
 
-        if (!eventViewRepository.existsByEventAndIpAddress(event, ipAddress)) {
-            EventView view = new EventView();
-            view.setEvent(event);
-            view.setIpAddress(ipAddress);
-            view.setViewedAt(LocalDateTime.now());
-            eventViewRepository.save(view);
+//        if (!eventViewRepository.existsByEventAndIpAddress(event, ipAddress)) {
+//            EventView view = new EventView();
+//            view.setEvent(event);
+//            view.setIpAddress(ipAddress);
+//            view.setViewedAt(LocalDateTime.now());
+//            eventViewRepository.save(view);
 
             event.setViews(event.getViews() + 1);
             eventRepository.save(event);
-        }
+//        }
 
         return event;
     }

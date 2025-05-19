@@ -1,5 +1,6 @@
 package com.example.movie_poster.request;
 
+import com.example.movie_poster.request.dto.ParticipationRequestDto;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,4 +13,6 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findAllByEventId(int eventId);
 
     List<Request> findByRequesterId(int userId);
+
+    List<Request> findByEventIdAndStatus(Integer eventId, RequestState status);
 }

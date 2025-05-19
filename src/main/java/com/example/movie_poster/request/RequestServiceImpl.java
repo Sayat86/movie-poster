@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -112,7 +113,61 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public EventRequestStatusUpdateResult updateEventRequests(int userId, int eventId, EventRequestStatusUpdateRequest updateRequest) {
-        return null;
-        //todo
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Event with id=" + eventId + " was not found"));
+
+        if (!event.getInitiator().getId().equals(userId)) {
+            throw new ForbiddenException("User is not the initiator of the event");
+        }
+
+        if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
+            throw new ConflictException("No need to confirm requests for this event");
+        }
+
+        List<Request> requests = requestRepository.findAllById(updateRequest.getRequestIds());
+
+        for (Request request : requests) {
+            if (request.getStatus() != RequestState.PENDING) {
+                throw new ConflictException("Request must have status PENDING");
+            }
+        }
+
+        List<Request> confirmed = new ArrayList<>();
+        List<Request> rejected = new ArrayList<>();
+
+        int confirmedCount = requestRepository.countByEventIdAndStatus(eventId, RequestState.CONFIRMED);
+        int availableSlots = event.getParticipantLimit() - confirmedCount;
+
+        for (Request request : requests) {
+            if (updateRequest.getStatus() == RequestState.CONFIRMED) {
+                if (availableSlots > 0) {
+                    request.setStatus(RequestState.CONFIRMED);
+                    confirmed.add(request);
+                    availableSlots--;
+                } else {
+                    throw new ConflictException("The participant limit has been reached");
+                }
+            } else if (updateRequest.getStatus() == RequestState.REJECTED) {
+                request.setStatus(RequestState.REJECTED);
+                rejected.add(request);
+            }
+        }
+
+        requestRepository.saveAll(requests);
+
+        if (updateRequest.getStatus() == RequestState.CONFIRMED && availableSlots == 0) {
+            List<Request> pendingToReject = requestRepository
+                    .findByEventIdAndStatus(eventId, RequestState.PENDING);
+            for (Request pending : pendingToReject) {
+                pending.setStatus(RequestState.REJECTED);
+            }
+            rejected.addAll(pendingToReject);
+            requestRepository.saveAll(pendingToReject);
+        }
+
+        return new EventRequestStatusUpdateResult(
+                requestMapper.toResponse(confirmed),
+                requestMapper.toResponse(rejected)
+        );
     }
 }

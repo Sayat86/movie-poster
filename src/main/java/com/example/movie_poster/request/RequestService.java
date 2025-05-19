@@ -3,7 +3,6 @@ package com.example.movie_poster.request;
 import com.example.movie_poster.event.dto.EventRequestStatusUpdateRequest;
 import com.example.movie_poster.event.dto.EventRequestStatusUpdateResult;
 import com.example.movie_poster.request.dto.ParticipationRequestDto;
-import jakarta.validation.Valid;
 
 import java.util.List;
 

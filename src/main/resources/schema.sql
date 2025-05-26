@@ -43,7 +43,7 @@ create table events
 create table compilations
 (
     id serial primary key,
-    title varchar(255) not null,
+    title varchar(50) not null,
     pinned boolean not null
 );
 

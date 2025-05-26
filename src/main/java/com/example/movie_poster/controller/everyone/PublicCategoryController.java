@@ -20,6 +20,7 @@ public class PublicCategoryController {
 
     @GetMapping
     public List<CategoryResponseDto> findAll() {
+        //todo добавить пагинацию
         return categoryMapper.toResponse(categoryService.findAll());
     }
 

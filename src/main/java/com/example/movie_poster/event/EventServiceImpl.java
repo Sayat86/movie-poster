@@ -118,6 +118,9 @@ public class EventServiceImpl implements EventService {
         }
 
         if (event.getAnnotation() != null) {
+            if (event.getAnnotation().isBlank()) {
+                throw new BadRequestException("TODO");
+            }
             existingEvent.setAnnotation(event.getAnnotation());
         }
         if (event.getDescription() != null) {
@@ -239,7 +242,11 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<Event> findAllPublic(String text, List<Integer> categories, Boolean paid,
                                      LocalDateTime rangeStart, LocalDateTime rangeEnd,
-                                     boolean onlyAvailable, String sort, int from, int size) {
+                                     Boolean onlyAvailable, String sort, int from, int size) {
+
+        if (rangeStart != null && rangeStart.isAfter(rangeEnd)) {
+            throw new BadRequestException("Дата начала не может быть позже даты окончания");
+        }
 
         Pageable pageable = PageRequest.of(from / size, size, getSort(sort));
 
@@ -277,7 +284,7 @@ public class EventServiceImpl implements EventService {
 
         List<Event> events = eventRepository.findAll(spec, pageable).getContent();
 
-        if (onlyAvailable) {
+        if (onlyAvailable != null && onlyAvailable) {
             events = events.stream()
                     .filter(event -> event.getParticipantLimit() == 0 ||
                             event.getConfirmedRequests() < event.getParticipantLimit())

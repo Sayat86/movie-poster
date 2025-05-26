@@ -7,6 +7,7 @@ import com.example.movie_poster.event.dto.EventFullDto;
 import com.example.movie_poster.event.dto.EventMapper;
 import com.example.movie_poster.event.dto.EventShortDto;
 import com.example.movie_poster.event.dto.UpdateEventAdminRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -36,7 +37,7 @@ public class AdminEventController {
 
     @PatchMapping("/{eventId}")
     public EventFullDto update(@PathVariable int eventId,
-                               @RequestBody UpdateEventAdminRequest updateEvent) {
+                               @Valid @RequestBody UpdateEventAdminRequest updateEvent) {
         Event event = eventMapper.fromAdminUpdate(updateEvent);
         return eventMapper.toFullDto(eventService.updateByAdmin(eventId, event));
     }

@@ -22,10 +22,10 @@ public class PublicEventController {
     @GetMapping
     public List<EventShortDto> findAllPublic(@RequestParam(required = false) String text,
                                        @RequestParam(required = false) List<Integer> categories,
-                                       @RequestParam(required = false) boolean paid,
+                                       @RequestParam(required = false) Boolean paid,
                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
                                        @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
-                                       @RequestParam(required = false) boolean onlyAvailable,
+                                       @RequestParam(required = false) Boolean onlyAvailable,
                                        @RequestParam(required = false) String sort,
                                        @RequestParam(defaultValue = "0") int from,
                                        @RequestParam(defaultValue = "10") int size) {

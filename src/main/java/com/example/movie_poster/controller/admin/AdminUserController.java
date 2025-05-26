@@ -38,6 +38,7 @@ public class AdminUserController {
     public List<UserResponseDto> findAll(@RequestParam List<Integer> ids,
                                          @RequestParam(defaultValue = "0") int from,
                                          @RequestParam(defaultValue = "10") int size) {
+        //todo сделать параметр ids не обязательным requaredfalse
         int page = from / size;
         return userMapper.toResponse(userService.findAll(ids, page, size));
     }

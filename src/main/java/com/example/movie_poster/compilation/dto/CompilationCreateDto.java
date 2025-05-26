@@ -2,6 +2,7 @@ package com.example.movie_poster.compilation.dto;
 
 import com.example.movie_poster.event.dto.EventShortDto;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 public class CompilationCreateDto {
     private Boolean pinned;
     @NotBlank(message = "Заголовок не может быть пустым")
+    @Size(min = 1, max = 50)
     private String title;
     private List<Integer> events;
 }

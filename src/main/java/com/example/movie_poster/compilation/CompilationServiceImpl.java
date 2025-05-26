@@ -32,9 +32,13 @@ public class CompilationServiceImpl implements CompilationService {
     @Override
     public Compilation create(Compilation compilation) {
         // todo
-        List<Event> events = eventRepository.findAllById(compilation.getEvents().stream().map(Event::getId).toList());
-        compilationRepository.save(compilation);
-        compilation.setEvents(events);
+        if (compilation.getEvents() != null) {
+            List<Event> events = eventRepository.findAllById(compilation.getEvents().stream().map(Event::getId).toList());
+            compilationRepository.save(compilation);
+            compilation.setEvents(events);
+        } else {
+            compilationRepository.save(compilation);
+        }
         return compilation;
     }
 

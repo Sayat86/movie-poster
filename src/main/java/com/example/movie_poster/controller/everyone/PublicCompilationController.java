@@ -22,6 +22,7 @@ public class PublicCompilationController {
     @GetMapping
     public List<CompilationResponseDto> findAll() {
         return compilationMapper.toResponse(compilationService.findAll());
+        // todo добавить пагинацию
     }
 
     @GetMapping("/{id}")

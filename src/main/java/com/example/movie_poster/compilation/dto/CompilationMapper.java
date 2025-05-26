@@ -19,13 +19,16 @@ public class CompilationMapper {
         compilation.setTitle(compilationCreate.getTitle());
         compilation.setPinned(compilationCreate.getPinned());
 
-        List<Event> events = new ArrayList<>();
-        for (Integer eventId : compilationCreate.getEvents()) {
-            Event event = new Event();
-            event.setId(eventId);
-            events.add(event);
+        if (compilationCreate.getEvents() != null) {
+            List<Event> events = new ArrayList<>();
+            for (Integer eventId : compilationCreate.getEvents()) {
+                Event event = new Event();
+                event.setId(eventId);
+                events.add(event);
+            }
+            compilation.setEvents(events);
         }
-        compilation.setEvents(events);
+        //todo
 
         return compilation;
     }
@@ -34,13 +37,15 @@ public class CompilationMapper {
         Compilation compilation = new Compilation();
         compilation.setTitle(compilationUpdate.getTitle());
         compilation.setPinned(compilationUpdate.getPinned());
-        List<Event> events = new ArrayList<>();
-        for (Integer eventId : compilationUpdate.getEvents()) {
-            Event event = new Event();
-            event.setId(eventId);
-            events.add(event);
+        if (compilationUpdate.getEvents() != null) {
+            List<Event> events = new ArrayList<>();
+            for (Integer eventId : compilationUpdate.getEvents()) {
+                Event event = new Event();
+                event.setId(eventId);
+                events.add(event);
+            }
+            compilation.setEvents(events);
         }
-        compilation.setEvents(events);
         return compilation;
     }
 

@@ -28,8 +28,6 @@ public class CompilationMapper {
             }
             compilation.setEvents(events);
         }
-        //todo
-
         return compilation;
     }
 
@@ -54,7 +52,6 @@ public class CompilationMapper {
         compilationResponse.setId(compilation.getId());
         compilationResponse.setTitle(compilation.getTitle());
         compilationResponse.setPinned(compilation.getPinned());
-        // todo
         // создание списка для того чтобы передать setEvents
         List<EventShortDto> events = new ArrayList<>();
 

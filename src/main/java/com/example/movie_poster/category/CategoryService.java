@@ -7,5 +7,5 @@ public interface CategoryService {
     Category update(Category category, int id);
     Category findById(int id);
     void deleteById(int id);
-    List<Category> findAll();
+    List<Category> findAll(int page, int size);
 }

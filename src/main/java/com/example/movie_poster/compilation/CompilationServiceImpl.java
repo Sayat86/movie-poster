@@ -1,11 +1,16 @@
 package com.example.movie_poster.compilation;
 
+import com.example.movie_poster.category.Category;
 import com.example.movie_poster.compilation.dto.CompilationMapper;
 import com.example.movie_poster.event.Event;
 import com.example.movie_poster.event.EventRepository;
 import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.NotFoundException;
+import com.example.movie_poster.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +24,14 @@ public class CompilationServiceImpl implements CompilationService {
     private final EventRepository eventRepository;
 
     @Override
-    public List<Compilation> findAll() {
-        return compilationRepository.findAll();
+    public List<Compilation> findAll(Boolean pinned, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+
+        if (pinned == null) {
+            return compilationRepository.findAll(pageable).getContent(); // все записи
+        }
+
+        return compilationRepository.findByPinned(pinned, pageable).getContent();
     }
 
     @Override
@@ -31,7 +42,6 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public Compilation create(Compilation compilation) {
-        // todo
         if (compilation.getEvents() != null) {
             List<Event> events = eventRepository.findAllById(compilation.getEvents().stream().map(Event::getId).toList());
             compilationRepository.save(compilation);

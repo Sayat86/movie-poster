@@ -4,24 +4,27 @@ import com.example.movie_poster.compilation.CompilationService;
 import com.example.movie_poster.compilation.dto.CompilationCreateDto;
 import com.example.movie_poster.compilation.dto.CompilationMapper;
 import com.example.movie_poster.compilation.dto.CompilationResponseDto;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/compilations")
+@Validated
 public class PublicCompilationController {
     private final CompilationService compilationService;
     private final CompilationMapper compilationMapper;
 
     @GetMapping
-    public List<CompilationResponseDto> findAll() {
-        return compilationMapper.toResponse(compilationService.findAll());
+    public List<CompilationResponseDto> findAll(@RequestParam(required = false) Boolean pinned,
+                                                @RequestParam(defaultValue = "0") @Min(0) int from,
+                                                @RequestParam(defaultValue = "10") @Min(1) int size) {
+        int page = from / size;
+        return compilationMapper.toResponse(compilationService.findAll(pinned, page, size));
         // todo добавить пагинацию
     }
 

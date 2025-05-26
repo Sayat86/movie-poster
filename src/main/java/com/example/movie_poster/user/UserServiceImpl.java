@@ -56,6 +56,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAll(List<Integer> ids, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
+
+        if (ids == null || ids.isEmpty()) {
+            return userRepository.findAll(pageable).getContent();
+        }
+
         Page<User> pageResult = userRepository.findByIdIn(ids, pageable);
         return pageResult.getContent();
     }

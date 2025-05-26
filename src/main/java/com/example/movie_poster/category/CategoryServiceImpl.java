@@ -4,8 +4,12 @@ import com.example.movie_poster.category.dto.CategoryMapper;
 import com.example.movie_poster.event.EventRepository;
 import com.example.movie_poster.exception.ConflictException;
 import com.example.movie_poster.exception.NotFoundException;
+import com.example.movie_poster.user.User;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -64,8 +68,11 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.deleteById(id);
     }
 
+
     @Override
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<Category> findAll(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Category> pageResult = categoryRepository.findAll(pageable);
+        return pageResult.getContent();
     }
 }

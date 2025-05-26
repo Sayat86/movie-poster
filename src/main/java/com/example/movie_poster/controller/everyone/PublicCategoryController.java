@@ -4,10 +4,7 @@ import com.example.movie_poster.category.CategoryService;
 import com.example.movie_poster.category.dto.CategoryMapper;
 import com.example.movie_poster.category.dto.CategoryResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,10 +16,13 @@ public class PublicCategoryController {
     private final CategoryMapper categoryMapper;
 
     @GetMapping
-    public List<CategoryResponseDto> findAll() {
+    public List<CategoryResponseDto> findAll(@RequestParam(defaultValue = "0") int from,
+                                             @RequestParam(defaultValue = "10") int size) {
         //todo добавить пагинацию
-        return categoryMapper.toResponse(categoryService.findAll());
+        int page = from / size;
+        return categoryMapper.toResponse(categoryService.findAll(page, size));
     }
+
 
     @GetMapping("/{id}")
     public CategoryResponseDto findById(@PathVariable int id) {

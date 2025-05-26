@@ -3,7 +3,7 @@ package com.example.movie_poster.compilation;
 import java.util.List;
 
 public interface CompilationService {
-    List<Compilation> findAll();
+    List<Compilation> findAll(Boolean pinned, int page, int size);
     Compilation findById(int id);
     Compilation create(Compilation compilation);
     void deleteById(int id);

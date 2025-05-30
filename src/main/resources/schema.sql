@@ -44,7 +44,7 @@ create table compilations
 (
     id serial primary key,
     title varchar(50) not null,
-    pinned boolean not null
+    pinned boolean default false
 );
 
 create table compilation_events

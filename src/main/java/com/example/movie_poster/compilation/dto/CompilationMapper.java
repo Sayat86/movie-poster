@@ -17,7 +17,7 @@ public class CompilationMapper {
     public Compilation fromCreate(CompilationCreateDto compilationCreate) {
         Compilation compilation = new Compilation();
         compilation.setTitle(compilationCreate.getTitle());
-        compilation.setPinned(compilationCreate.getPinned());
+        compilation.setPinned(compilationCreate.isPinned());
 
         if (compilationCreate.getEvents() != null) {
             List<Event> events = new ArrayList<>();

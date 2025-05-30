@@ -42,6 +42,7 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public Compilation create(Compilation compilation) {
+
         if (compilation.getEvents() != null) {
             List<Event> events = eventRepository.findAllById(compilation.getEvents().stream().map(Event::getId).toList());
             compilationRepository.save(compilation);

@@ -45,6 +45,7 @@ public class EventServiceImpl implements EventService {
         if (event.getParticipantLimit() != null && event.getParticipantLimit() < 0) {
             throw new BadRequestException("Лимит участников не может быть отрицательным");
         }
+        //todo добавить проверку private post events
         event.setCategory(category);
         event.setInitiator(user);
         event.setCreatedOn(LocalDateTime.now());

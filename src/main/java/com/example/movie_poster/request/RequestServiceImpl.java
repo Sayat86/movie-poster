@@ -50,8 +50,8 @@ public class RequestServiceImpl implements RequestService {
             throw new ConflictException("Нельзя участвовать в неопубликованном событии.");
         }
 
-        // 4. Проверка на лимит участников
-        if (event.getParticipantLimit() > 0 && event.getConfirmedRequests() >= event.getParticipantLimit()) {
+        //todo 4. Проверка на лимит участников
+        if (event.getParticipantLimit() > 0 && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
             throw new ConflictException("Лимит участников исчерпан.");
         }
 
@@ -59,12 +59,12 @@ public class RequestServiceImpl implements RequestService {
         request.setRequester(user);
         request.setEvent(event);
         request.setCreated(LocalDateTime.now());
-        if (event.getParticipantLimit() == 0) {
+        if (event.getParticipantLimit() == 0 || !event.getRequestModeration()) {
             request.setStatus(RequestState.CONFIRMED);
+            event.setConfirmedRequests(event.getConfirmedRequests() + 1);
         } else {
             request.setStatus(RequestState.PENDING);
         }
-        event.setConfirmedRequests(event.getConfirmedRequests() + 1);
         eventRepository.save(event);
         return requestRepository.save(request);
     }

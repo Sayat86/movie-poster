@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class CompilationCreateDto {
-    private Boolean pinned;
+    private boolean pinned;
     @NotBlank(message = "Заголовок не может быть пустым")
     @Size(min = 1, max = 50)
     private String title;

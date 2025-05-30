@@ -1,0 +1,17 @@
+package com.example.eventsdiscovery.event;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+public interface EventService {
+    List<Event> findEventAddedByUserId(int userId, int page, int size);
+    Event create(Event event, int userId);
+    Event findFullEventInfoByUser(int userId, int eventId);
+    Event updateByUser(Event event, int userId, int eventId);
+    Event updateByAdmin(int eventId, Event event);
+    Event findById(int id, String ipAddress);
+    List<Event> findAllPublic(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart,
+                              LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, int from, int size);
+    List<Event> findAllAdmin(Integer users, List<EventState> states, List<Integer> categories,
+                             LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size);
+}

@@ -24,7 +24,6 @@ public class PublicCompilationController {
                                                 @RequestParam(defaultValue = "10") @Min(1) int size) {
         int page = from / size;
         return compilationMapper.toResponse(compilationService.findAll(pinned, page, size));
-        // todo добавить пагинацию
     }
 
     @GetMapping("/{id}")

@@ -46,6 +46,10 @@ public class EventServiceImpl implements EventService {
             throw new BadRequestException("Лимит участников не может быть отрицательным");
         }
         //todo добавить проверку private post events
+        // Проверка, что дата и время события не раньше, чем через 2 часа от текущего момента
+        if (event.getEventDate() == null || event.getEventDate().isBefore(LocalDateTime.now().plusHours(2))) {
+            throw new BadRequestException("Дата и время события должны быть не раньше, чем через 2 часа от текущего момента");
+        }
         event.setCategory(category);
         event.setInitiator(user);
         event.setCreatedOn(LocalDateTime.now());

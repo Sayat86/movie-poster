@@ -39,7 +39,7 @@ public class Event {
     @AttributeOverride(name = "lon", column = @Column(name = "location_lon"))
     private Location location;
     @Column(name = "confirmed_requests")
-    private Integer confirmedRequests;
+    private Integer confirmedRequests = 0;
     private Integer views;
     @Column(name = "is_published")
     private Boolean isPublished;

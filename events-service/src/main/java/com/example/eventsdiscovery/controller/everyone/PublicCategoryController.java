@@ -18,7 +18,6 @@ public class PublicCategoryController {
     @GetMapping
     public List<CategoryResponseDto> findAll(@RequestParam(defaultValue = "0") int from,
                                              @RequestParam(defaultValue = "10") int size) {
-        //todo добавить пагинацию
         int page = from / size;
         return categoryMapper.toResponse(categoryService.findAll(page, size));
     }

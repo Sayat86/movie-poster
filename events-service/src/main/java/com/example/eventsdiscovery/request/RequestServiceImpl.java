@@ -51,6 +51,9 @@ public class RequestServiceImpl implements RequestService {
         }
 
         //todo 4. Проверка на лимит участников
+//        if (event.getParticipantLimit() > 0 && event.getConfirmedRequests() >= event.getParticipantLimit()) {
+//            throw new ConflictException("Лимит участников исчерпан.");
+//        }
         if (event.getParticipantLimit() > 0 && event.getConfirmedRequests().equals(event.getParticipantLimit())) {
             throw new ConflictException("Лимит участников исчерпан.");
         }

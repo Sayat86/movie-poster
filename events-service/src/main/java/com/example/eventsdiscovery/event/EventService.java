@@ -12,6 +12,6 @@ public interface EventService {
     Event findById(int id, String ipAddress);
     List<Event> findAllPublic(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart,
                               LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, int from, int size);
-    List<Event> findAllAdmin(Integer users, List<EventState> states, List<Integer> categories,
+    List<Event> findAllAdmin(List<Integer> users, List<EventState> states, List<Integer> categories,
                              LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size);
 }

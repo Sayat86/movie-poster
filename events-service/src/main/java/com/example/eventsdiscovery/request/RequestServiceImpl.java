@@ -147,6 +147,7 @@ public class RequestServiceImpl implements RequestService {
                     request.setStatus(RequestState.CONFIRMED);
                     confirmed.add(request);
                     availableSlots--;
+                    event.setConfirmedRequests(event.getConfirmedRequests()+1);
                 } else {
                     throw new ConflictException("The participant limit has been reached");
                 }

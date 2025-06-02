@@ -309,7 +309,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> findAllAdmin(Integer users, List<EventState> states, List<Integer> categories,
+    public List<Event> findAllAdmin(List<Integer> users, List<EventState> states, List<Integer> categories,
                                     LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
 
         Pageable pageable = PageRequest.of(from / size, size);
@@ -318,7 +318,7 @@ public class EventServiceImpl implements EventService {
 
         if (users != null) {
             spec = spec.and((root, query, cb) ->
-                    cb.equal(root.get("initiator").get("id"), users));
+                    root.get("initiator").get("id").in(users));
         }
 
         if (states != null && !states.isEmpty()) {

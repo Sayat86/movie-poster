@@ -40,7 +40,8 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<ViewStats> findAll(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        return List.of();
+    public List<ViewStats> findAll(LocalDateTime start, LocalDateTime end,
+                                   List<String> uris, Boolean unique) {
+        return hitRepository.findAllViewStats();
     }
 }

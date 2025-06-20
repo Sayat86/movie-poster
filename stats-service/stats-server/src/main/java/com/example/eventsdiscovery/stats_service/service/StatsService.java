@@ -13,4 +13,18 @@ public interface StatsService {
                             LocalDateTime end,
                             List<String> uris,
                             Boolean unique);
+
+//    List<ViewStats> findAllViewStatsStartBetweenEnd(LocalDateTime start,
+//                                                         LocalDateTime end);
+//
+//    List<ViewStats> findAllViewStatsStartBetweenEndAndUris(LocalDateTime start,
+//                                                           LocalDateTime end,
+//                                                           List<String> uris);
+//
+//    List<ViewStats> findAllViewStatsStartBetweenEndUnique(LocalDateTime start,
+//                                                          LocalDateTime end);
+//
+//    List<ViewStats> findAllViewStatsStartBetweenEndAndUrisUnique(LocalDateTime start,
+//                                                                      LocalDateTime end,
+//                                                                      List<String> uris);
 }

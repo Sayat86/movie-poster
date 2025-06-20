@@ -42,6 +42,48 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<ViewStats> findAll(LocalDateTime start, LocalDateTime end,
                                    List<String> uris, Boolean unique) {
-        return hitRepository.findAllViewStats();
+        if (start.isAfter(end)) {
+            throw new IllegalArgumentException("Start time must be before end time");
+        }
+
+        if (unique != null && unique) {
+            if (uris != null && !uris.isEmpty()) {
+                return hitRepository.findAllViewStatsWhereStartBetweenEndAndUrisUnique(start, end, uris);
+            } else {
+                return hitRepository.findAllViewStatsWhereStartBetweenEndUnique(start, end);
+            }
+        } else {
+            if (uris != null && !uris.isEmpty()) {
+                return hitRepository.findAllViewStatsWhereStartBetweenEndAndUris(start, end, uris);
+            } else {
+                return hitRepository.findAllViewStatsWhereStartBetweenEnd(start, end);
+            }
+        }
     }
+
+//    @Override
+//    public List<ViewStats> findAllViewStatsStartBetweenEnd(LocalDateTime start,
+//                                                           LocalDateTime end) {
+//        return hitRepository.findAllViewStatsWhereStartBetweenEnd(start, end);
+//    }
+//
+//    @Override
+//    public List<ViewStats> findAllViewStatsStartBetweenEndAndUris(LocalDateTime start,
+//                                                                LocalDateTime end,
+//                                                                List<String> uris) {
+//        return hitRepository.findAllViewStatsWhereStartBetweenEndAndUris(start, end, uris);
+//    }
+//
+//    @Override
+//    public List<ViewStats> findAllViewStatsStartBetweenEndUnique(LocalDateTime start,
+//                                                                 LocalDateTime end) {
+//        return hitRepository.findAllViewStatsWhereStartBetweenEndUnique(start, end);
+//    }
+//
+//    @Override
+//    public List<ViewStats> findAllViewStatsStartBetweenEndAndUrisUnique(LocalDateTime start,
+//                                                                        LocalDateTime end,
+//                                                                        List<String> uris) {
+//        return hitRepository.findAllViewStatsWhereStartBetweenEndAndUrisUnique(start, end, uris);
+//    }
 }

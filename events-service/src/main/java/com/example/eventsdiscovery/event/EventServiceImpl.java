@@ -7,6 +7,7 @@ import com.example.eventsdiscovery.exception.ConflictException;
 import com.example.eventsdiscovery.exception.NotFoundException;
 import com.example.eventsdiscovery.user.User;
 import com.example.eventsdiscovery.user.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.criteria.Predicate;
+import org.springframework.web.client.RestTemplate;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -27,6 +30,12 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
+
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    private void createEndpointHit(HttpServletRequest request) {
+
+    }
 
     @Override
     public List<Event> findEventAddedByUserId(int userId, int page, int size) {
@@ -222,7 +231,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event findById(int id, String ipAddress) {
+    public Event findById(int id, HttpServletRequest request) {
         Event event = eventRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Событие не найдено"));
 

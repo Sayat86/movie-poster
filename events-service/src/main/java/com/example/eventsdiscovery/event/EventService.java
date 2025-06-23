@@ -1,5 +1,7 @@
 package com.example.eventsdiscovery.event;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -9,7 +11,7 @@ public interface EventService {
     Event findFullEventInfoByUser(int userId, int eventId);
     Event updateByUser(Event event, int userId, int eventId);
     Event updateByAdmin(int eventId, Event event);
-    Event findById(int id, String ipAddress);
+    Event findById(int id, HttpServletRequest request);
     List<Event> findAllPublic(String text, List<Integer> categories, Boolean paid, LocalDateTime rangeStart,
                               LocalDateTime rangeEnd, Boolean onlyAvailable, String sort, int from, int size);
     List<Event> findAllAdmin(List<Integer> users, List<EventState> states, List<Integer> categories,

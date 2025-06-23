@@ -36,11 +36,6 @@ public class PublicEventController {
 
     @GetMapping("/{id}")
     public EventFullDto findById(@PathVariable int id, HttpServletRequest request) {
-        String ip = request.getHeader("X-Forwarded-For");
-        if (ip == null || ip.isBlank()) {
-            ip = request.getRemoteAddr();
-        }
-
-        return eventMapper.toFullDto(eventService.findById(id, ip));
+        return eventMapper.toFullDto(eventService.findById(id, request));
     }
 }

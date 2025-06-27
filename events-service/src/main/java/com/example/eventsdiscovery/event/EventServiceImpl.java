@@ -5,6 +5,7 @@ import com.example.eventsdiscovery.category.CategoryRepository;
 import com.example.eventsdiscovery.exception.BadRequestException;
 import com.example.eventsdiscovery.exception.ConflictException;
 import com.example.eventsdiscovery.exception.NotFoundException;
+import com.example.eventsdiscovery.stats_service.client.StatsClient;
 import com.example.eventsdiscovery.user.User;
 import com.example.eventsdiscovery.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,8 +31,7 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
-
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final StatsClient statsClient;
 
     private void createEndpointHit(HttpServletRequest request) {
 
@@ -239,6 +239,7 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundException("Событие не найдено или ещё не опубликовано");
         }
 
+        statsClient.create();//todo создать endpointHit
 //        if (!eventViewRepository.existsByEventAndIpAddress(event, ipAddress)) {
 //            EventView view = new EventView();
 //            view.setEvent(event);

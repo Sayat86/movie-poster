@@ -6,6 +6,8 @@ import com.example.eventsdiscovery.exception.BadRequestException;
 import com.example.eventsdiscovery.exception.ConflictException;
 import com.example.eventsdiscovery.exception.NotFoundException;
 import com.example.eventsdiscovery.stats_service.client.StatsClient;
+import com.example.eventsdiscovery.stats_service.dto.EndpointHit;
+import com.example.eventsdiscovery.stats_service.dto.ViewStats;
 import com.example.eventsdiscovery.user.User;
 import com.example.eventsdiscovery.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -239,18 +241,19 @@ public class EventServiceImpl implements EventService {
             throw new NotFoundException("Событие не найдено или ещё не опубликовано");
         }
 
-        statsClient.create();//todo создать endpointHit
-//        if (!eventViewRepository.existsByEventAndIpAddress(event, ipAddress)) {
-//            EventView view = new EventView();
-//            view.setEvent(event);
-//            view.setIpAddress(ipAddress);
-//            view.setViewedAt(LocalDateTime.now());
-//            eventViewRepository.save(view);
+        EndpointHit endpointHit = new EndpointHit();
+        endpointHit.setApp("event-service");
+        endpointHit.setIp(request.getRemoteAddr());
+        endpointHit.setTimestamp(LocalDateTime.now());
+        endpointHit.setUri("/events/" + id);
 
-            event.setViews(event.getViews() + 1);
-            eventRepository.save(event);
-//        }
+        statsClient.create(endpointHit);
 
+        LocalDateTime start = LocalDateTime.of(1970, 1, 1, 0, 0);
+        LocalDateTime end = LocalDateTime.now();
+        List<ViewStats> viewStats = statsClient.findAll(start, end, List.of("/events/" + id), true);
+        event.setViews(viewStats.size());
+        eventRepository.save(event);
         return event;
     }
 

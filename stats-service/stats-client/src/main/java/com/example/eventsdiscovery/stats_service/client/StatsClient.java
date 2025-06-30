@@ -1,5 +1,6 @@
 package com.example.eventsdiscovery.stats_service.client;
 
+import com.example.eventsdiscovery.stats_service.dto.EndpointHit;
 import com.example.eventsdiscovery.stats_service.dto.ViewStats;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -37,5 +38,10 @@ public class StatsClient {
 //        return list;
 
         return Arrays.asList(arr);
+    }
+
+    public void create(EndpointHit endpointHit) {
+        String url = baseUrl + "/hit";
+        restTemplate.postForObject(url, endpointHit, Void.class);
     }
 }
